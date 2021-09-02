@@ -197,7 +197,7 @@
             <arguments>
               <argument>-package</argument>
               <argument>net.opentsdb.expressions.parser</argument>
-              <argument>-no-listener</argument>
+              <argument>-listener</argument>
               <argument>-visitor</argument>
             </arguments>
    
