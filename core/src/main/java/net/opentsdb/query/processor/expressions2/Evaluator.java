@@ -8,9 +8,10 @@ import net.opentsdb.query.processor.expressions2.nodes.Double;
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionVisitor;
 import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
-import net.opentsdb.query.processor.expressions2.nodes.Metric;
 import net.opentsdb.query.processor.expressions2.nodes.Long;
+import net.opentsdb.query.processor.expressions2.nodes.Metric;
 import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
+import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 
 public class Evaluator implements ExpressionVisitor {
     private final EvaluationContext context;
@@ -40,6 +41,14 @@ public class Evaluator implements ExpressionVisitor {
         final Value rhs = context.pop();
         final Value lhs = context.pop();
         context.push(lhs.add(rhs));
+    }
+
+    @Override public void enterSubtraction(Subtraction s) {}
+    @Override public void leaveSubtraction(Subtraction s) {
+        System.out.println("leaving subtraction");
+        final Value rhs = context.pop();
+        final Value lhs = context.pop();
+        context.push(lhs.subtract(rhs));
     }
 
     @Override public void enterBool(final Bool b) {}

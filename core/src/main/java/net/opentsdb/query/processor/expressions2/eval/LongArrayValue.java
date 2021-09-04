@@ -44,6 +44,35 @@ public class LongArrayValue implements ArrayValue<Long> {
     }
 
     @Override
+    public Value subtract(final Value value) {
+        return value.negate().add(this);
+    }
+
+    @Override
+    public Value subtract(final LongConstantValue value) {
+        for (int i = 0; i < underlying.length; ++i) {
+            underlying[i] -= value.getValue();
+        }
+        return this;
+    }
+
+    @Override
+    public Value subtract(final LongArrayValue values) {
+        for (int i = 0; i < underlying.length; ++i) {
+            underlying[i] -= values.getValueAt(i);
+        }
+        return this;
+    }
+
+    @Override
+    public Value negate() {
+        for (int i = 0; i < underlying.length; ++i) {
+            underlying[i] = -underlying[i];
+        }
+        return this;
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;

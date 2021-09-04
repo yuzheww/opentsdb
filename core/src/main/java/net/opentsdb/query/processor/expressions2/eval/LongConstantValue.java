@@ -28,6 +28,28 @@ public class LongConstantValue extends ConstantValue<Long> {
     }
 
     @Override
+    public Value subtract(final Value value) {
+        return value.negate().add(this);
+    }
+
+    @Override
+    public Value subtract(final LongConstantValue value) {
+        this.underlying -= value.underlying;
+        return this;
+    }
+
+    @Override
+    public Value subtract(final LongArrayValue values) {
+        return values.negate().add(this);
+    }
+
+    @Override
+    public Value negate() {
+        underlying = -underlying;
+        return this;
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;
@@ -43,5 +65,10 @@ public class LongConstantValue extends ConstantValue<Long> {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "LongConstantValue{" + underlying + "}";
     }
 }

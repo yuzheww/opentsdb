@@ -12,6 +12,7 @@ import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Long;
 import net.opentsdb.query.processor.expressions2.nodes.Metric;
 import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
+import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.DefaultErrorStrategy;
@@ -72,8 +73,18 @@ public class ExpressionParser extends DefaultErrorStrategy
         System.out.println("exitAdd()");
         final ExpressionNode rhs = pop();
         final ExpressionNode lhs = pop();
-        System.out.println("pushing addition");
-        push(new Addition(lhs, rhs));
+
+        switch (ctx.op.getType()) {
+        case MetricExpression2Parser.ADD:
+            System.out.println("pushing addition");
+            push(new Addition(lhs, rhs));
+            break;
+
+        case MetricExpression2Parser.SUB:
+            System.out.println("pushing subtraction");
+            push(new Subtraction(lhs, rhs));
+            break;
+        }
     }
 
     @Override public void enterOr(final MetricExpression2Parser.OrContext ctx) {}

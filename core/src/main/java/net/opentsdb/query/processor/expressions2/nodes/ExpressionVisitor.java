@@ -4,6 +4,9 @@ public interface ExpressionVisitor {
     void enterAddition(Addition a);
     void leaveAddition(Addition a);
 
+    void enterSubtraction(Subtraction s);
+    void leaveSubtraction(Subtraction s);
+
     void enterBool(Bool b);
     void leaveBool(Bool b);
 
