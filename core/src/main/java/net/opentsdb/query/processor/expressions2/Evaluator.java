@@ -4,11 +4,11 @@ import net.opentsdb.query.processor.expressions2.eval.LongConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.Value;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
 import net.opentsdb.query.processor.expressions2.nodes.Bool;
+import net.opentsdb.query.processor.expressions2.nodes.Double;
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionVisitor;
 import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Metric;
-import net.opentsdb.query.processor.expressions2.nodes.Double;
 import net.opentsdb.query.processor.expressions2.nodes.Long;
 import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
 

@@ -1,14 +1,16 @@
-package net.opentsdb.query.processor.expressions2.eval;
+package net.opentsdb.query.processor.expressions2;
 
 public class EvaluationOptions {
-    public class Builder {
+    public static class Builder {
         private boolean infectiousNaN;
 
         public Builder() {
+            infectiousNaN = false;
         }
 
-        public void setInfectiousNaN(final boolean flag) {
+        public Builder setInfectiousNaN(final boolean flag) {
             this.infectiousNaN = flag;
+            return this;
         }
 
         public EvaluationOptions build() {

@@ -10,23 +10,20 @@ import net.opentsdb.query.processor.expressions2.eval.Value;
 import org.junit.Test;
 
 public class TestEvaluator {
-    final EvaluationContext exampleContext;
-    private final Map<String, Value> examples;
-
-    public TestEvaluator() {
-        exampleContext = new EvaluationContext.Builder().
+    @Test
+    public void testByExample() {
+        final EvaluationOptions options = new EvaluationOptions.Builder().
+            build();
+        final EvaluationContext context = new EvaluationContext.Builder(options).
             define("nat", new LongArrayValue(new long[] {0, 1, 2, 3, 4})).
             build();
+        final Evaluator evaluator = new Evaluator(context);
 
-        examples = new HashMap<String, Value>() {{
+        final Map<String, Value> examples = new HashMap<String, Value>() {{
             put("1 + 2", new LongConstantValue(3));
             put("nat + 1", new LongArrayValue(new long[] {1, 2, 3, 4, 5}));
         }};
-    }
 
-    @Test
-    public void testByExample() {
-        final Evaluator evaluator = new Evaluator(exampleContext);
         for (final Map.Entry<String, Value> example : examples.entrySet()) {
             final Value result = evaluator.evaluate(example.getKey());
             assertEquals(example.getValue(), result);

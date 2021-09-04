@@ -9,9 +9,12 @@ import net.opentsdb.query.processor.expressions2.eval.Value;
 
 public class EvaluationContext {
     public static class Builder {
+        private EvaluationOptions options;
         private Map<String, Value> metrics;
 
-        public Builder() {
+        public Builder(final EvaluationOptions options) {
+            this.options = options;
+
             metrics = new HashMap<>();
         }
 
@@ -25,11 +28,12 @@ public class EvaluationContext {
         }
     }
 
+    private final EvaluationOptions options;
     private final Map<String, Value> metrics;
-
     private final Deque<Value> stack;
 
     private EvaluationContext(final Builder builder) {
+        this.options = builder.options;
         this.metrics = Collections.unmodifiableMap(builder.metrics);
 
         stack = new ArrayDeque<>();
@@ -57,5 +61,9 @@ public class EvaluationContext {
             throw new ExpressionException("tried to look up an undefined metric name in EvaluationContext");
         }
         return result.makeCopy();
+    }
+
+    public EvaluationOptions getOptions() {
+        return options;
     }
 }
