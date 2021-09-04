@@ -31,9 +31,16 @@ public class TestLogicalNegation {
     }
 
     @Test
-    public void testTypeError() {
+    public void testTypeErrorDouble() {
         exnRule.expect(ExpressionException.class);
         exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
-        new LogicalNegation(new Number(3.14159265));
+        new LogicalNegation(new Double(3.14159265));
+    }
+
+    @Test
+    public void testTypeErrorLong() {
+        exnRule.expect(ExpressionException.class);
+        exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
+        new LogicalNegation(new Long(42L));
     }
 }

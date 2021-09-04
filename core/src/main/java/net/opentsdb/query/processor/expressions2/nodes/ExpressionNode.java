@@ -22,4 +22,6 @@ public abstract class ExpressionNode {
     }
 
     public abstract boolean isTerminal();
+
+    public abstract void accept(ExpressionVisitor visitor);
 }

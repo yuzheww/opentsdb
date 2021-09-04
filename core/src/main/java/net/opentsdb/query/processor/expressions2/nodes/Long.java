@@ -2,20 +2,17 @@ package net.opentsdb.query.processor.expressions2.nodes;
 
 import net.opentsdb.query.processor.expressions2.types.TypeLiteral;
 
-public class Bool extends Terminal {
-    private final boolean value;
+public class Long extends Terminal {
+    private final long value;
 
-    private Bool(final boolean value) {
-        super(TypeLiteral.BOOLEAN);
+    public Long(final long value) {
+        super(TypeLiteral.NUMERIC);
         this.value = value;
     }
 
-    public boolean getValue() {
+    public long getValue() {
         return value;
     }
-
-    public static final Bool TRUE = new Bool(true);
-    public static final Bool FALSE = new Bool(false);
 
     @Override
     public boolean equals(final Object other) {
@@ -27,8 +24,8 @@ public class Bool extends Terminal {
             return false;
         }
 
-        if (other instanceof Bool) {
-            final Bool that = (Bool) other;
+        if (this.getClass() == other.getClass()) {
+            final Long that = (Long) other;
             return this.value == that.value;
         }
 
@@ -37,7 +34,7 @@ public class Bool extends Terminal {
 
     @Override
     public void accept(final ExpressionVisitor visitor) {
-        visitor.enterBool(this);
-        visitor.leaveBool(this);
+        visitor.enterLong(this);
+        visitor.leaveLong(this);
     }
 }

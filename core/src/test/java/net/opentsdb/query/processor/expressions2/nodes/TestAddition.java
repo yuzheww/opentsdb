@@ -15,13 +15,13 @@ public class TestAddition {
 
     @Test
     public void testArity() {
-        final Addition a = new Addition(new Number(7), new Number(11));
+        final Addition a = new Addition(new Long(7), new Long(11));
         assertEquals(2, a.getArity());
     }
 
     @Test
     public void testGetType() {
-        final Addition a = new Addition(new Number(3.14159), new Number(2.71828));
+        final Addition a = new Addition(new Double(3.14159), new Double(2.71828));
         assertEquals(TypeLiteral.NUMERIC, a.getType());
     }
 
@@ -29,22 +29,23 @@ public class TestAddition {
     public void testTypeErrorBooleanRHS() {
         exnRule.expect(ExpressionException.class);
         exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
-        new Addition(new Number(3.14159), Bool.TRUE);
+        new Addition(new Double(3.14159), Bool.TRUE);
     }
 
     @Test
     public void testTypeErrorBooleanLHS() {
         exnRule.expect(ExpressionException.class);
         exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
-        new Addition(Bool.FALSE, new Number(2.71828));
+        new Addition(Bool.FALSE, new Double(2.71828));
     }
 
     @Test
     public void testEquals() {
-        final Addition a = new Addition(new Number(3.14159), new Number(2.71828));
+        final Addition a = new Addition(new Double(3.14159), new Double(2.71828));
         assertEquals(a, a);
 
-        final Addition b = new Addition(new Number(7), new Number(11));
+        final Addition b = new Addition(new Long(7), new Long(11));
+        assertEquals(b, b);
         assertNotEquals(a, b);
         assertNotEquals(b, a);
     }

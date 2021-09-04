@@ -8,8 +8,8 @@ import net.opentsdb.query.processor.expressions2.types.TupleType;
  * assumes that its output type is the same as its left-hand operand.
  */
 public abstract class BinaryOperator extends ExpressionOperator {
-    private ExpressionNode lhs;
-    private ExpressionNode rhs;
+    protected ExpressionNode lhs;
+    protected ExpressionNode rhs;
 
     public BinaryOperator(final String symbol, final ExpressionNode leftOperand, final ExpressionNode rightOperand) {
         super(symbol, new TupleType(leftOperand.getType(), rightOperand.getType()));

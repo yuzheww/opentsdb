@@ -6,10 +6,11 @@ import net.opentsdb.expressions.parser.MetricExpression2Listener;
 import net.opentsdb.expressions.parser.MetricExpression2Parser;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
 import net.opentsdb.query.processor.expressions2.nodes.Bool;
+import net.opentsdb.query.processor.expressions2.nodes.Double;
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
+import net.opentsdb.query.processor.expressions2.nodes.Long;
 import net.opentsdb.query.processor.expressions2.nodes.Metric;
-import net.opentsdb.query.processor.expressions2.nodes.Number;
 import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -108,12 +109,22 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void exitNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {
         System.out.println("exitNumeric_literal()");
         final String encoded = ctx.getText();
+
+        // We want to treat every number as a long, if possible.
         try {
-            final double dval = Double.parseDouble(encoded);
-            System.out.println("pushing number: " + dval);
-            push(new Number(dval));
+            final long lval = java.lang.Long.parseLong(encoded);
+            System.out.println("pushing long: " + lval);
+            push(new Long(lval));
+            return;
+        } catch (final NumberFormatException e) { /* unsurprising */ }
+
+        // If necessary, we will resort to floating-point representation.
+        try {
+            final double dval = java.lang.Double.parseDouble(encoded);
+            System.out.println("pushing double: " + dval);
+            push(new Double(dval));
         } catch (final NumberFormatException e) {
-            throw new ExpressionException("could not parse '" + encoded + "' as double: " + e.getMessage());
+            throw new ExpressionException("could not parse '" + encoded + "' as long or double: " + e.getMessage());
         }
     }
 

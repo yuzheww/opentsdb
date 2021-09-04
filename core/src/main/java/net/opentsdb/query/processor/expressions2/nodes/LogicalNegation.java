@@ -16,4 +16,11 @@ public class LogicalNegation extends UnaryOperator {
     public FunctionType[] getTypeSignatures() {
         return SIGNATURES;
     }
+
+    @Override
+    public void accept(final ExpressionVisitor visitor) {
+        visitor.enterLogicalNegation(this);
+        operand.accept(visitor);
+        visitor.leaveLogicalNegation(this);
+    }
 }

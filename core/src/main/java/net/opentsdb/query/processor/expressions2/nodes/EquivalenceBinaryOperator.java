@@ -8,7 +8,7 @@ import net.opentsdb.query.processor.expressions2.types.TypeLiteral;
  * EquivalenceBinaryOperator constrains its two operands to have the same type, and
  * it sets its output type as Boolean.
  */
-public class EquivalenceBinaryOperator extends BinaryOperator {
+public abstract class EquivalenceBinaryOperator extends BinaryOperator {
     public EquivalenceBinaryOperator(final String symbol, final ExpressionNode leftOperand, final ExpressionNode rightOperand) {
         super(symbol, leftOperand, rightOperand);
     }

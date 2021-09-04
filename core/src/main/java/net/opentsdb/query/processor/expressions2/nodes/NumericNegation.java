@@ -16,4 +16,11 @@ public class NumericNegation extends UnaryOperator {
     public FunctionType[] getTypeSignatures() {
         return SIGNATURES;
     }
+
+    @Override
+    public void accept(final ExpressionVisitor visitor) {
+        visitor.enterNumericNegation(this);
+        operand.accept(visitor);
+        visitor.leaveNumericNegation(this);
+    }
 }

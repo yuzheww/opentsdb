@@ -14,24 +14,24 @@ public class TestNumericNegation {
 
     @Test
     public void testArity() {
-        final NumericNegation neg = new NumericNegation(new Number(2.71828));
+        final NumericNegation neg = new NumericNegation(new Double(2.71828));
         assertEquals(1, neg.getArity());
     }
 
     @Test
     public void testGetSymbol() {
-        final NumericNegation neg = new NumericNegation(new Number(3.14159265));
+        final NumericNegation neg = new NumericNegation(new Double(3.14159265));
         assertEquals("-", neg.getSymbol());
     }
 
     @Test
     public void testGetType() {
-        final NumericNegation neg = new NumericNegation(new Number(0));
+        final NumericNegation neg = new NumericNegation(new Long(16L));
         assertEquals(TypeLiteral.NUMERIC, neg.getType());
     }
 
     @Test
-    public void testTypeError() {
+    public void testTypeErrorBool() {
         exnRule.expect(ExpressionException.class);
         exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
         new NumericNegation(Bool.TRUE);

@@ -1,7 +1,7 @@
 package net.opentsdb.query.processor.expressions2.nodes;
 
 public abstract class UnaryOperator extends ExpressionOperator {
-    private ExpressionNode operand;
+    protected ExpressionNode operand;
 
     public UnaryOperator(final String symbol, final ExpressionNode operand) {
         super(symbol, operand.getType());

@@ -32,4 +32,10 @@ public class Metric extends Terminal {
 
         return false;
     }
+
+    @Override
+    public void accept(final ExpressionVisitor visitor) {
+        visitor.enterMetric(this);
+        visitor.leaveMetric(this);
+    }
 }
