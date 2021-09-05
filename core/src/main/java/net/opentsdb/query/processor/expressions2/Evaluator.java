@@ -1,5 +1,6 @@
 package net.opentsdb.query.processor.expressions2;
 
+import net.opentsdb.query.processor.expressions2.eval.DoubleConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.LongConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.Value;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
@@ -64,7 +65,10 @@ public class Evaluator implements ExpressionVisitor {
     }
 
     @Override public void enterDouble(final Double d) {}
-    @Override public void leaveDouble(final Double d) {}
+    @Override public void leaveDouble(final Double d) {
+        System.out.println("leaving double: " + d.getValue());
+        context.push(new DoubleConstantValue(d.getValue()));
+    }
 
     @Override public void enterLong(final Long l) {}
     @Override public void leaveLong(final Long l) {

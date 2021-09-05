@@ -20,7 +20,7 @@ public class TestLongConstantValue {
         final Value y = x.makeCopy();
 
         assertEquals(x, y); // same underlying value
-        assertTrue(x == y); // same object (immutable)
+        assertTrue(x != y); // different object
     }
 
     @Test

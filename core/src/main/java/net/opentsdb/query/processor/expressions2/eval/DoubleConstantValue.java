@@ -1,19 +1,21 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public class LongConstantValue extends ConstantValue<Long> {
-    private long underlying;
+import com.google.common.math.DoubleMath;
 
-    public LongConstantValue(final long value) {
+public class DoubleConstantValue extends ConstantValue<Double> {
+    private double underlying;
+
+    public DoubleConstantValue(final double value) {
         this.underlying = value;
     }
 
-    public long getValue() {
+    public double getValue() {
         return underlying;
     }
 
     @Override
     public Value makeCopy() {
-        return new LongConstantValue(underlying);
+        return new DoubleConstantValue(underlying);
     }
 
     @Override
@@ -23,18 +25,34 @@ public class LongConstantValue extends ConstantValue<Long> {
 
     @Override
     public Value add(final LongConstantValue value) {
-        this.underlying += value.underlying;
+        this.underlying += (double) value.getValue();
         return this;
     }
 
     @Override
     public Value add(final DoubleConstantValue value) {
-        return value.add(this);
+        this.underlying += value.underlying;
+        return this;
     }
 
     @Override
     public Value add(final LongArrayValue values) {
-        return values.add(this);
+        if (DoubleMath.isMathematicalInteger(underlying)) {
+            // This double constant is representable as a long.
+            final long addend = (long) underlying;
+            for (int i = 0; i < values.underlying.length; ++i) {
+                values.underlying[i] += addend;
+            }
+            return values;
+        } else {
+            // Must convert to double array.
+            final long[] longs = values.underlying;
+            final double[] doubles = new double[longs.length];
+            for (int i = 0; i < longs.length; ++i) {
+                doubles[i] = underlying + (double) longs[i];
+            }
+            return new DoubleArrayValue(doubles);
+        }
     }
 
     @Override
@@ -49,18 +67,24 @@ public class LongConstantValue extends ConstantValue<Long> {
 
     @Override
     public Value subtract(final LongConstantValue value) {
-        this.underlying -= value.underlying;
+        this.underlying -= (double) value.getValue();
         return this;
     }
 
     @Override
     public Value subtract(final DoubleConstantValue value) {
-        return value.negate().add(this);
+        this.underlying -= value.underlying;
+        return this;
     }
 
     @Override
     public Value subtract(final LongArrayValue values) {
-        return values.negate().add(this);
+        final long[] longs = values.getUnderlying();
+        final double[] doubles = new double[longs.length];
+        for (int i = 0; i < longs.length; ++i) {
+            doubles[i] = underlying - (double) longs[i];
+        }
+        return new DoubleArrayValue(doubles);
     }
 
     @Override
@@ -85,7 +109,7 @@ public class LongConstantValue extends ConstantValue<Long> {
         }
 
         if (this.getClass() == other.getClass()) {
-            final LongConstantValue that = (LongConstantValue) other;
+            final DoubleConstantValue that = (DoubleConstantValue) other;
             return this.underlying == that.underlying;
         }
 
@@ -94,6 +118,6 @@ public class LongConstantValue extends ConstantValue<Long> {
 
     @Override
     public String toString() {
-        return "LongConstantValue{" + underlying + "}";
+        return "DoubleConstantValue{" + underlying + "}";
     }
 }

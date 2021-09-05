@@ -5,15 +5,15 @@ public interface Value {
 
     Value add(Value value);
     Value add(LongConstantValue value);
+    Value add(DoubleConstantValue value);
     Value add(LongArrayValue values);
-    //Value add(DoubleConstantValue value);
-    //Value add(DoubleArrayValue values);
+    Value add(DoubleArrayValue values);
 
     Value subtract(Value value);
     Value subtract(LongConstantValue value);
+    Value subtract(DoubleConstantValue value);
     Value subtract(LongArrayValue values);
-    //Value subtract(DoubleConstantValue value);
-    //Value subtract(DoubleArrayValue values);
+    Value subtract(DoubleArrayValue values);
 
     Value negate();
 }
