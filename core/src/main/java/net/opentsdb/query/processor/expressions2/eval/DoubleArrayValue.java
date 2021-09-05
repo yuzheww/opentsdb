@@ -1,9 +1,10 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
+import com.google.common.primitives.Doubles;
 import java.util.Arrays;
 
-public class DoubleArrayValue implements ArrayValue<Double> {
-    private final double[] underlying;
+public class DoubleArrayValue extends NumericValue<Double> {
+    final double[] underlying;
 
     public DoubleArrayValue(final double[] values) {
         underlying = values;
@@ -20,6 +21,14 @@ public class DoubleArrayValue implements ArrayValue<Double> {
     @Override
     public Value makeCopy() {
         return new DoubleArrayValue(Arrays.copyOf(underlying, underlying.length));
+    }
+
+    @Override
+    public Value negate() {
+        for (int i = 0; i < underlying.length; ++i) {
+            underlying[i] = -underlying[i];
+        }
+        return this;
     }
 
     @Override
@@ -99,14 +108,6 @@ public class DoubleArrayValue implements ArrayValue<Double> {
     }
 
     @Override
-    public Value negate() {
-        for (int i = 0; i < underlying.length; ++i) {
-            underlying[i] = -underlying[i];
-        }
-        return this;
-    }
-
-    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;
@@ -122,5 +123,10 @@ public class DoubleArrayValue implements ArrayValue<Double> {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "DoubleArrayValue{" + Doubles.join(",", underlying) + "}";
     }
 }

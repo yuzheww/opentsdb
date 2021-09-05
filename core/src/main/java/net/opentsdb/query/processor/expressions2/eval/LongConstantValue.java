@@ -1,7 +1,7 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public class LongConstantValue extends ConstantValue<Long> {
-    private long underlying;
+public class LongConstantValue extends NumericValue<Long> {
+    long underlying;
 
     public LongConstantValue(final long value) {
         this.underlying = value;
@@ -14,6 +14,12 @@ public class LongConstantValue extends ConstantValue<Long> {
     @Override
     public Value makeCopy() {
         return new LongConstantValue(underlying);
+    }
+
+    @Override
+    public Value negate() {
+        underlying = -underlying;
+        return this;
     }
 
     @Override
@@ -66,12 +72,6 @@ public class LongConstantValue extends ConstantValue<Long> {
     @Override
     public Value subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
-    }
-
-    @Override
-    public Value negate() {
-        underlying = -underlying;
-        return this;
     }
 
     @Override

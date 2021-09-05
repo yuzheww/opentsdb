@@ -2,8 +2,8 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import com.google.common.math.DoubleMath;
 
-public class DoubleConstantValue extends ConstantValue<Double> {
-    private double underlying;
+public class DoubleConstantValue extends NumericValue<Double> {
+    double underlying;
 
     public DoubleConstantValue(final double value) {
         this.underlying = value;
@@ -16,6 +16,12 @@ public class DoubleConstantValue extends ConstantValue<Double> {
     @Override
     public Value makeCopy() {
         return new DoubleConstantValue(underlying);
+    }
+
+    @Override
+    public Value negate() {
+        underlying = -underlying;
+        return this;
     }
 
     @Override
@@ -90,12 +96,6 @@ public class DoubleConstantValue extends ConstantValue<Double> {
     @Override
     public Value subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
-    }
-
-    @Override
-    public Value negate() {
-        underlying = -underlying;
-        return this;
     }
 
     @Override

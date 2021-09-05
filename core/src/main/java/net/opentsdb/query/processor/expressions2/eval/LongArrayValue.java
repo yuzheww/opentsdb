@@ -3,7 +3,7 @@ package net.opentsdb.query.processor.expressions2.eval;
 import com.google.common.math.DoubleMath;
 import java.util.Arrays;
 
-public class LongArrayValue implements ArrayValue<Long> {
+public class LongArrayValue extends NumericValue<Long> {
     final long[] underlying;
 
     public LongArrayValue(final long[] values) {
@@ -21,6 +21,14 @@ public class LongArrayValue implements ArrayValue<Long> {
     @Override
     public Value makeCopy() {
         return new LongArrayValue(Arrays.copyOf(underlying, underlying.length));
+    }
+
+    @Override
+    public Value negate() {
+        for (int i = 0; i < underlying.length; ++i) {
+            underlying[i] = -underlying[i];
+        }
+        return this;
     }
 
     @Override
@@ -117,14 +125,6 @@ public class LongArrayValue implements ArrayValue<Long> {
     @Override
     public Value subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
-    }
-
-    @Override
-    public Value negate() {
-        for (int i = 0; i < underlying.length; ++i) {
-            underlying[i] = -underlying[i];
-        }
-        return this;
     }
 
     @Override

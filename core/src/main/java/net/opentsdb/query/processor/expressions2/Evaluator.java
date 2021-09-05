@@ -1,5 +1,6 @@
 package net.opentsdb.query.processor.expressions2;
 
+import net.opentsdb.query.processor.expressions2.eval.BooleanConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.DoubleConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.LongConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.Value;
@@ -38,7 +39,6 @@ public class Evaluator implements ExpressionVisitor {
 
     @Override public void enterAddition(final Addition a) {}
     @Override public void leaveAddition(final Addition a) {
-        System.out.println("leaving addition");
         final Value rhs = context.pop();
         final Value lhs = context.pop();
         context.push(lhs.add(rhs));
@@ -46,36 +46,42 @@ public class Evaluator implements ExpressionVisitor {
 
     @Override public void enterSubtraction(Subtraction s) {}
     @Override public void leaveSubtraction(Subtraction s) {
-        System.out.println("leaving subtraction");
         final Value rhs = context.pop();
         final Value lhs = context.pop();
         context.push(lhs.subtract(rhs));
     }
 
     @Override public void enterBool(final Bool b) {}
-    @Override public void leaveBool(final Bool b) {}
+    @Override public void leaveBool(final Bool b) {
+        if (Bool.TRUE == b) {
+            context.push(BooleanConstantValue.TRUE);
+        } else {
+            context.push(BooleanConstantValue.FALSE);
+        }
+    }
 
     @Override public void enterLogicalNegation(final LogicalNegation n) {}
-    @Override public void leaveLogicalNegation(final LogicalNegation n) {}
+    @Override public void leaveLogicalNegation(final LogicalNegation n) {
+        context.push(context.pop().complement());
+    }
 
     @Override public void enterMetric(final Metric m) {}
     @Override public void leaveMetric(final Metric m) {
-        System.out.println("leaving metric: " + m.getName());
         context.push(context.lookup(m.getName()));
     }
 
     @Override public void enterDouble(final Double d) {}
     @Override public void leaveDouble(final Double d) {
-        System.out.println("leaving double: " + d.getValue());
         context.push(new DoubleConstantValue(d.getValue()));
     }
 
     @Override public void enterLong(final Long l) {}
     @Override public void leaveLong(final Long l) {
-        System.out.println("leaving long: " + l.getValue());
         context.push(new LongConstantValue(l.getValue()));
     }
 
     @Override public void enterNumericNegation(final NumericNegation n) {}
-    @Override public void leaveNumericNegation(final NumericNegation n) {}
+    @Override public void leaveNumericNegation(final NumericNegation n) {
+        context.push(context.pop().negate());
+    }
 }

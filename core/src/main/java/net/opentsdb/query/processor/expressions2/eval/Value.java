@@ -3,6 +3,9 @@ package net.opentsdb.query.processor.expressions2.eval;
 public interface Value {
     Value makeCopy();
 
+    Value negate();
+    Value complement();
+
     Value add(Value value);
     Value add(LongConstantValue value);
     Value add(DoubleConstantValue value);
@@ -14,6 +17,4 @@ public interface Value {
     Value subtract(DoubleConstantValue value);
     Value subtract(LongArrayValue values);
     Value subtract(DoubleArrayValue values);
-
-    Value negate();
 }
