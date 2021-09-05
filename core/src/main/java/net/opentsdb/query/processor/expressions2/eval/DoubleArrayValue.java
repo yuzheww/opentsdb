@@ -1,5 +1,6 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
+import com.google.common.math.DoubleMath;
 import com.google.common.primitives.Doubles;
 import java.util.Arrays;
 
@@ -119,7 +120,18 @@ public class DoubleArrayValue extends NumericValue<Double> {
 
         if (this.getClass() == other.getClass()) {
             final DoubleArrayValue that = (DoubleArrayValue) other;
-            return Arrays.equals(this.underlying, that.underlying);
+
+            if (this.underlying.length != that.underlying.length) {
+                return false;
+            }
+
+            for (int i = 0; i < this.underlying.length; ++i) {
+                if (!DoubleMath.fuzzyEquals(this.underlying[i], that.underlying[i], EPSILON)) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         return false;

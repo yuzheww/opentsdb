@@ -110,7 +110,7 @@ public class DoubleConstantValue extends NumericValue<Double> {
 
         if (this.getClass() == other.getClass()) {
             final DoubleConstantValue that = (DoubleConstantValue) other;
-            return this.underlying == that.underlying;
+            return DoubleMath.fuzzyEquals(this.underlying, that.underlying, EPSILON);
         }
 
         return false;

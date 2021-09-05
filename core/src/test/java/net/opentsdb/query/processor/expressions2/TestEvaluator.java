@@ -16,12 +16,15 @@ public class TestEvaluator {
     @Test
     public void testByExample() {
         final EvaluationOptions options = new EvaluationOptions.Builder().
+            setInfectiousNaN(false).
             build();
+
         final EvaluationContext context = new EvaluationContext.Builder(options).
             define("nat", new LongArrayValue(new long[] {0, 1, 2, 3, 4})).
             define("natSquared", new LongArrayValue(new long[] {0, 1, 4, 9, 16})).
             define("ieee754", new DoubleArrayValue(new double[] {1.25, 3d, 0.7, 8.1, 4.75})).
             build();
+
         final Evaluator evaluator = new Evaluator(context);
 
         final Map<String, Value> examples = new HashMap<String, Value>() {{
@@ -36,6 +39,7 @@ public class TestEvaluator {
             put("nat + 2.0", new LongArrayValue(new long [] {2, 3, 4, 5, 6}));
             put("2.0 + nat", new LongArrayValue(new long [] {2, 3, 4, 5, 6}));
             put("nat + natSquared", new LongArrayValue(new long[] {0, 2, 6, 12, 20}));
+            put("natSquared + ieee754 + nat", new DoubleArrayValue(new double[] {1.25, 5d, 6.7, 20.1, 24.75}));
             put("7 - 3", new LongConstantValue(4));
             put("nat - 2", new LongArrayValue(new long[] {-2, -1, 0, 1, 2}));
             put("-(nat - 2)", new LongArrayValue(new long[] {2, 1, 0, -1, -2}));
@@ -47,6 +51,7 @@ public class TestEvaluator {
             put("1 + ieee754", new DoubleArrayValue(new double[] {2.25, 4d, 1.7, 9.1, 5.75}));
             put("ieee754 - 3", new DoubleArrayValue(new double[] {-1.75, 0d, -2.3, 5.1, 1.75}));
             put("-(ieee754 - 3)", new DoubleArrayValue(new double[] {1.75, -0d, 2.3, -5.1, -1.75}));
+            put("natSquared - ieee754 + nat", new DoubleArrayValue(new double[] {-1.25, -1d, 5.3, 3.9, 15.25}));
         }};
 
         for (final Map.Entry<String, Value> example : examples.entrySet()) {
