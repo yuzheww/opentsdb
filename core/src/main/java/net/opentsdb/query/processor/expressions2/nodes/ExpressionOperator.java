@@ -12,19 +12,7 @@ public abstract class ExpressionOperator extends ExpressionNode {
 
         this.symbol = symbol;
 
-        FunctionType signature = null;
-        for (final FunctionType sig : this.getTypeSignatures()) {
-            if (sig.getDomain().equals(domainType)) {
-                signature = sig;
-                break;
-            }
-        }
-
-        if (null == signature) {
-            throw new ExpressionException("could not match given domain type to any valid signature in ExpressionOperator");
-        }
-
-        setType(signature.getRange());
+        setType(findMatchingSignature(domainType).getRange());
     }
 
     @Override
@@ -38,9 +26,26 @@ public abstract class ExpressionOperator extends ExpressionNode {
     public abstract int getArity();
 
     /**
-     * Yield all valid type signatures for this operator.
+     * Yield all valid type signatures for this operator. In each list of types,
+     * the domain type should be unique because findMatchingSignature() will
+     * select only the first matching type.
      */
     public abstract FunctionType[] getTypeSignatures();
+
+    /**
+     * Find the first function signature satisfied by the given domainType.
+     * @param domainType
+     * @return The first signature satisfied by domainType.
+     */
+    public FunctionType findMatchingSignature(final ExpressionType domainType) {
+        for (final FunctionType sig : getTypeSignatures()) {
+            if (sig.getDomain().equals(domainType)) {
+                return sig;
+            }
+        }
+
+        throw new ExpressionException("could not match given domain type to any valid signature in ExpressionOperator");
+    }
 
     public String getSymbol() {
         return symbol;
@@ -48,7 +53,6 @@ public abstract class ExpressionOperator extends ExpressionNode {
 
     @Override
     public boolean equals(final Object other) {
-        System.out.println("ExpressionOperator.equals()");
         if (this == other) {
             return true;
         }

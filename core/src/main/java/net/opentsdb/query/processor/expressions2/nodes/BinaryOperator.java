@@ -47,7 +47,6 @@ public abstract class BinaryOperator extends ExpressionOperator {
 
     @Override
     public boolean equals(final Object other) {
-        System.out.println("BinaryOperator.equals()");
         if (this == other) {
             return true;
         }

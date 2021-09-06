@@ -16,7 +16,6 @@ public class Metric extends Terminal {
 
     @Override
     public boolean equals(final Object other) {
-        System.out.println("Metric.equals()");
         if (this == other) {
             return true;
         }

@@ -28,27 +28,22 @@ public class ExpressionParser extends DefaultErrorStrategy
     public ExpressionParser() {}
 
     public ExpressionNode parse(final String expression) {
-        System.out.println("parse checkpoint #1");
         final ANTLRInputStream istream = new ANTLRInputStream(expression);
         final MetricExpression2Lexer lexer = new MetricExpression2Lexer(istream);
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
         final MetricExpression2Parser parser = new MetricExpression2Parser(tokens);
-        System.out.println("parse checkpoint #2");
 
         //parser.removeErrorListeners();
         //parser.setErrorHandler(this);
 
         final MetricExpression2Parser.ProgContext parseTree = parser.prog();
-        System.out.println("parse checkpoint #3");
 
         final ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(this, parseTree);
-        System.out.println("parse checkpoint #4");
 
         if (1 != stack.size()) {
             throw new ExpressionException("postcondition violated: after parsing, stack must have only 1 element");
         }
-        System.out.println("parse checkpoint #5");
 
         return stack.pop();
     }
@@ -70,18 +65,15 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void enterAdd(final MetricExpression2Parser.AddContext ctx) {}
 
     @Override public void exitAdd(final MetricExpression2Parser.AddContext ctx) {
-        System.out.println("exitAdd()");
         final ExpressionNode rhs = pop();
         final ExpressionNode lhs = pop();
 
         switch (ctx.op.getType()) {
         case MetricExpression2Parser.ADD:
-            System.out.println("pushing addition");
             push(new Addition(lhs, rhs));
             break;
 
         case MetricExpression2Parser.SUB:
-            System.out.println("pushing subtraction");
             push(new Subtraction(lhs, rhs));
             break;
         }
@@ -118,13 +110,11 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void enterNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {}
 
     @Override public void exitNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {
-        System.out.println("exitNumeric_literal()");
         final String encoded = ctx.getText();
 
         // We want to treat every number as a long, if possible.
         try {
             final long lval = java.lang.Long.parseLong(encoded);
-            System.out.println("pushing long: " + lval);
             push(new Long(lval));
             return;
         } catch (final NumberFormatException e) { /* unsurprising */ }
@@ -132,7 +122,6 @@ public class ExpressionParser extends DefaultErrorStrategy
         // If necessary, we will resort to floating-point representation.
         try {
             final double dval = java.lang.Double.parseDouble(encoded);
-            System.out.println("pushing double: " + dval);
             push(new Double(dval));
         } catch (final NumberFormatException e) {
             throw new ExpressionException("could not parse '" + encoded + "' as long or double: " + e.getMessage());
@@ -142,7 +131,6 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void enterBoolean_literal(final MetricExpression2Parser.Boolean_literalContext ctx) {}
 
     @Override public void exitBoolean_literal(final MetricExpression2Parser.Boolean_literalContext ctx) {
-        System.out.println("exitBoolean_literal()");
         final String encoded = ctx.getText().toLowerCase();
         if (encoded.equals("true")) {
             push(Bool.TRUE);
@@ -158,14 +146,8 @@ public class ExpressionParser extends DefaultErrorStrategy
         push(new Metric(ctx.getText()));
     }
 
-    @Override public void enterEveryRule(final ParserRuleContext ctx) {
-        System.out.println("enter: " + ctx.toStringTree());
-    }
-    @Override public void exitEveryRule(final ParserRuleContext ctx) {
-        System.out.println("exit: " + ctx.toStringTree());
-    }
-    @Override public void visitTerminal(final TerminalNode node) {
-        System.out.println("visitTerminal(" + node.getSymbol().getText() + ")");
-    }
+    @Override public void enterEveryRule(final ParserRuleContext ctx) {}
+    @Override public void exitEveryRule(final ParserRuleContext ctx) {}
+    @Override public void visitTerminal(final TerminalNode node) {}
     @Override public void visitErrorNode(final ErrorNode node) {}
 }
