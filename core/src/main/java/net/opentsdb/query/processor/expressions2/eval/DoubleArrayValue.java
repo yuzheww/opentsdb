@@ -20,12 +20,12 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value makeCopy() {
+    public ExpressionValue makeCopy() {
         return new DoubleArrayValue(Arrays.copyOf(underlying, underlying.length));
     }
 
     @Override
-    public Value negate() {
+    public ExpressionValue negate() {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] = -underlying[i];
         }
@@ -33,12 +33,12 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value add(final Value value) {
+    public ExpressionValue add(final ExpressionValue value) {
         return value.add(this);
     }
 
     @Override
-    public Value add(final LongConstantValue value) {
+    public ExpressionValue add(final LongValue value) {
         final double addend = (double) value.getValue();
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += addend;
@@ -47,7 +47,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value add(final DoubleConstantValue value) {
+    public ExpressionValue add(final DoubleValue value) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += value.getValue();
         }
@@ -55,7 +55,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value add(final LongArrayValue values) {
+    public ExpressionValue add(final LongArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += (double) values.getValueAt(i);
         }
@@ -63,7 +63,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value add(final DoubleArrayValue values) {
+    public ExpressionValue add(final DoubleArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += values.getValueAt(i);
         }
@@ -71,12 +71,12 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value subtract(final Value value) {
+    public ExpressionValue subtract(final ExpressionValue value) {
         return value.negate().add(this);
     }
 
     @Override
-    public Value subtract(final LongConstantValue value) {
+    public ExpressionValue subtract(final LongValue value) {
         final double subtrahend = (double) value.getValue();
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= subtrahend;
@@ -85,7 +85,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value subtract(final DoubleConstantValue value) {
+    public ExpressionValue subtract(final DoubleValue value) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= value.getValue();
         }
@@ -93,7 +93,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value subtract(final LongArrayValue values) {
+    public ExpressionValue subtract(final LongArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= (double) values.getValueAt(i);
         }
@@ -101,7 +101,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value subtract(final DoubleArrayValue values) {
+    public ExpressionValue subtract(final DoubleArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= values.getValueAt(i);
         }

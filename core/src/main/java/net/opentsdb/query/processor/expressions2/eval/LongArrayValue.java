@@ -1,6 +1,7 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
 import com.google.common.math.DoubleMath;
+import com.google.common.primitives.Longs;
 import java.util.Arrays;
 
 public class LongArrayValue extends NumericValue<Long> {
@@ -19,12 +20,12 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value makeCopy() {
+    public ExpressionValue makeCopy() {
         return new LongArrayValue(Arrays.copyOf(underlying, underlying.length));
     }
 
     @Override
-    public Value negate() {
+    public ExpressionValue negate() {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] = -underlying[i];
         }
@@ -32,12 +33,12 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value add(final Value value) {
+    public ExpressionValue add(final ExpressionValue value) {
         return value.add(this);
     }
 
     @Override
-    public Value add(final LongConstantValue value) {
+    public ExpressionValue add(final LongValue value) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += value.getValue();
         }
@@ -45,7 +46,7 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value add(final DoubleConstantValue value) {
+    public ExpressionValue add(final DoubleValue value) {
         // Can we possibly avoid converting this array?
         final double addend = value.getValue();
         if (DoubleMath.isMathematicalInteger(addend)) {
@@ -66,7 +67,7 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value add(final LongArrayValue values) {
+    public ExpressionValue add(final LongArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += values.getValueAt(i);
         }
@@ -74,19 +75,19 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value add(final DoubleArrayValue values) {
+    public ExpressionValue add(final DoubleArrayValue values) {
         // We do not want to convert this array. Addition is commutative, so we
         // will defer to the double array implementation.
         return values.add(this);
     }
 
     @Override
-    public Value subtract(final Value value) {
+    public ExpressionValue subtract(final ExpressionValue value) {
         return value.negate().add(this);
     }
 
     @Override
-    public Value subtract(final LongConstantValue value) {
+    public ExpressionValue subtract(final LongValue value) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= value.getValue();
         }
@@ -94,7 +95,7 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value subtract(final DoubleConstantValue value) {
+    public ExpressionValue subtract(final DoubleValue value) {
         // Can we possibly avoid converting this array?
         final double subtrahend = value.getValue();
         if (DoubleMath.isMathematicalInteger(subtrahend)) {
@@ -115,7 +116,7 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value subtract(final LongArrayValue values) {
+    public ExpressionValue subtract(final LongArrayValue values) {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= values.getValueAt(i);
         }
@@ -123,7 +124,7 @@ public class LongArrayValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value subtract(final DoubleArrayValue values) {
+    public ExpressionValue subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
     }
 
@@ -143,5 +144,10 @@ public class LongArrayValue extends NumericValue<Long> {
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "LongArrayValue{" + Longs.join(",", underlying) + "}";
     }
 }

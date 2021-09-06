@@ -24,7 +24,7 @@ public class TestLongArrayValue {
     @Test
     public void testMakeCopy() {
         final LongArrayValue u = new LongArrayValue(new long[] {1L, 0L});
-        final Value v = u.makeCopy();
+        final ExpressionValue v = u.makeCopy();
 
         assertEquals(u, v); // same underlying value
         assertFalse(u == v); // different object
@@ -33,7 +33,7 @@ public class TestLongArrayValue {
     @Test
     public void testAddLong() {
         final LongArrayValue u = new LongArrayValue(new long[] {14L, 5L});
-        final LongConstantValue x = new LongConstantValue(3L);
+        final LongValue x = new LongValue(3L);
         u.add(x);
 
         assertArrayEquals(new long[] {17L, 8L}, u.getUnderlying()); // LHS mutated

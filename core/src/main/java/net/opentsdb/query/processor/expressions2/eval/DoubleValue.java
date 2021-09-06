@@ -2,10 +2,12 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import com.google.common.math.DoubleMath;
 
-public class DoubleConstantValue extends NumericValue<Double> {
+public class DoubleValue extends NumericValue<Double> {
+    public static final DoubleValue NAN = new DoubleValue(Double.NaN);
+
     double underlying;
 
-    public DoubleConstantValue(final double value) {
+    public DoubleValue(final double value) {
         this.underlying = value;
     }
 
@@ -14,35 +16,35 @@ public class DoubleConstantValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value makeCopy() {
-        return new DoubleConstantValue(underlying);
+    public ExpressionValue makeCopy() {
+        return new DoubleValue(underlying);
     }
 
     @Override
-    public Value negate() {
+    public ExpressionValue negate() {
         underlying = -underlying;
         return this;
     }
 
     @Override
-    public Value add(final Value value) {
+    public ExpressionValue add(final ExpressionValue value) {
         return value.add(this);
     }
 
     @Override
-    public Value add(final LongConstantValue value) {
+    public ExpressionValue add(final LongValue value) {
         this.underlying += (double) value.getValue();
         return this;
     }
 
     @Override
-    public Value add(final DoubleConstantValue value) {
+    public ExpressionValue add(final DoubleValue value) {
         this.underlying += value.underlying;
         return this;
     }
 
     @Override
-    public Value add(final LongArrayValue values) {
+    public ExpressionValue add(final LongArrayValue values) {
         if (DoubleMath.isMathematicalInteger(underlying)) {
             // This double constant is representable as a long.
             final long addend = (long) underlying;
@@ -62,29 +64,29 @@ public class DoubleConstantValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value add(final DoubleArrayValue values) {
+    public ExpressionValue add(final DoubleArrayValue values) {
         return values.add(this);
     }
 
     @Override
-    public Value subtract(final Value value) {
+    public ExpressionValue subtract(final ExpressionValue value) {
         return value.negate().add(this);
     }
 
     @Override
-    public Value subtract(final LongConstantValue value) {
+    public ExpressionValue subtract(final LongValue value) {
         this.underlying -= (double) value.getValue();
         return this;
     }
 
     @Override
-    public Value subtract(final DoubleConstantValue value) {
+    public ExpressionValue subtract(final DoubleValue value) {
         this.underlying -= value.underlying;
         return this;
     }
 
     @Override
-    public Value subtract(final LongArrayValue values) {
+    public ExpressionValue subtract(final LongArrayValue values) {
         final long[] longs = values.getUnderlying();
         final double[] doubles = new double[longs.length];
         for (int i = 0; i < longs.length; ++i) {
@@ -94,7 +96,7 @@ public class DoubleConstantValue extends NumericValue<Double> {
     }
 
     @Override
-    public Value subtract(final DoubleArrayValue values) {
+    public ExpressionValue subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
     }
 
@@ -109,7 +111,7 @@ public class DoubleConstantValue extends NumericValue<Double> {
         }
 
         if (this.getClass() == other.getClass()) {
-            final DoubleConstantValue that = (DoubleConstantValue) other;
+            final DoubleValue that = (DoubleValue) other;
             return DoubleMath.fuzzyEquals(this.underlying, that.underlying, EPSILON);
         }
 
@@ -118,6 +120,6 @@ public class DoubleConstantValue extends NumericValue<Double> {
 
     @Override
     public String toString() {
-        return "DoubleConstantValue{" + underlying + "}";
+        return "DoubleValue{" + underlying + "}";
     }
 }

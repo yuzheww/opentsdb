@@ -24,7 +24,7 @@ public class TestDoubleArrayValue {
     @Test
     public void testMakeCopy() {
         final DoubleArrayValue u = new DoubleArrayValue(new double[] {1d, 0d});
-        final Value v = u.makeCopy();
+        final ExpressionValue v = u.makeCopy();
 
         assertEquals(u, v); // same underlying value
         assertFalse(u == v); // different object
@@ -33,7 +33,7 @@ public class TestDoubleArrayValue {
     @Test
     public void testAddDouble() {
         final DoubleArrayValue u = new DoubleArrayValue(new double[] {3.25, 7.5});
-        final DoubleConstantValue x = new DoubleConstantValue(2.1);
+        final DoubleValue x = new DoubleValue(2.1);
         u.add(x);
 
         assertArrayEquals(new double[] {5.35, 9.6}, u.getUnderlying(), 1e-3); // LHS mutated

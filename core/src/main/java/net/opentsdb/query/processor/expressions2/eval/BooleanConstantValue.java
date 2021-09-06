@@ -2,7 +2,7 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import net.opentsdb.query.processor.expressions2.ExpressionException;
 
-public class BooleanConstantValue implements Value {
+public class BooleanConstantValue implements ExpressionValue {
     private final boolean underlying;
 
     private BooleanConstantValue(final boolean value) {
@@ -13,67 +13,67 @@ public class BooleanConstantValue implements Value {
     public static final BooleanConstantValue FALSE = new BooleanConstantValue(false);
 
     @Override
-    public Value makeCopy() {
+    public ExpressionValue makeCopy() {
         return this; // no such thing -- immutable object
     }
 
     @Override
-    public Value negate() {
+    public ExpressionValue negate() {
         throw new ExpressionException("illegal call of negate() on BooleanConstantValue");
     }
 
     @Override
-    public Value complement() {
+    public ExpressionValue complement() {
         return TRUE == this ? FALSE : TRUE;
     }
 
     @Override
-    public Value add(final Value value) {
+    public ExpressionValue add(final ExpressionValue value) {
         throw new ExpressionException("illegal call of add() on BooleanConstantValue");
     }
 
     @Override
-    public Value add(final LongConstantValue value) {
-        throw new ExpressionException("illegal call of add() on LongConstantValue");
+    public ExpressionValue add(final LongValue value) {
+        throw new ExpressionException("illegal call of add() on LongValue");
     }
 
     @Override
-    public Value add(final DoubleConstantValue value) {
+    public ExpressionValue add(final DoubleValue value) {
         throw new ExpressionException("illegal call of add() on BooleanConstantValue");
     }
 
     @Override
-    public Value add(final LongArrayValue values) {
-        throw new ExpressionException("illegal call of add() on LongConstantValue");
+    public ExpressionValue add(final LongArrayValue values) {
+        throw new ExpressionException("illegal call of add() on LongValue");
     }
 
     @Override
-    public Value add(final DoubleArrayValue values) {
+    public ExpressionValue add(final DoubleArrayValue values) {
         throw new ExpressionException("illegal call of add() on BooleanConstantValue");
     }
 
     @Override
-    public Value subtract(final Value value) {
+    public ExpressionValue subtract(final ExpressionValue value) {
         throw new ExpressionException("illegal call of subtract() on BooleanConstantValue");
     }
 
     @Override
-    public Value subtract(final LongConstantValue value) {
-        throw new ExpressionException("illegal call of subtract() on LongConstantValue");
+    public ExpressionValue subtract(final LongValue value) {
+        throw new ExpressionException("illegal call of subtract() on LongValue");
     }
 
     @Override
-    public Value subtract(final DoubleConstantValue value) {
+    public ExpressionValue subtract(final DoubleValue value) {
         throw new ExpressionException("illegal call of subtract() on BooleanConstantValue");
     }
 
     @Override
-    public Value subtract(final LongArrayValue values) {
-        throw new ExpressionException("illegal call of subtract() on LongConstantValue");
+    public ExpressionValue subtract(final LongArrayValue values) {
+        throw new ExpressionException("illegal call of subtract() on LongValue");
     }
 
     @Override
-    public Value subtract(final DoubleArrayValue values) {
+    public ExpressionValue subtract(final DoubleArrayValue values) {
         throw new ExpressionException("illegal call of subtract() on BooleanConstantValue");
     }
 

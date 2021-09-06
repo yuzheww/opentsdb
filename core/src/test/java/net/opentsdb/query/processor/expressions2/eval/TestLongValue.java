@@ -6,18 +6,18 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestLongConstantValue {
+public class TestLongValue {
     @Test
     public void testGetValue() {
-        final LongConstantValue x = new LongConstantValue(42L);
+        final LongValue x = new LongValue(42L);
 
         assertEquals(42L, x.getValue());
     }
 
     @Test
     public void testMakeCopy() {
-        final LongConstantValue x = new LongConstantValue(42L);
-        final Value y = x.makeCopy();
+        final LongValue x = new LongValue(42L);
+        final ExpressionValue y = x.makeCopy();
 
         assertEquals(x, y); // same underlying value
         assertTrue(x != y); // different object
@@ -25,8 +25,8 @@ public class TestLongConstantValue {
 
     @Test
     public void testAddLong() {
-        final LongConstantValue x = new LongConstantValue(7L);
-        final LongConstantValue y = new LongConstantValue(11L);
+        final LongValue x = new LongValue(7L);
+        final LongValue y = new LongValue(11L);
         x.add(y);
 
         assertEquals(18L, x.getValue()); // LHS mutated
@@ -35,7 +35,7 @@ public class TestLongConstantValue {
 
     @Test
     public void testAddLongArray() {
-        final LongConstantValue x = new LongConstantValue(1L);
+        final LongValue x = new LongValue(1L);
         final LongArrayValue u = new LongArrayValue(new long[] {0L, 5L});
         x.add(u);
 

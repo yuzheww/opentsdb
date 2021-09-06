@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import net.opentsdb.query.processor.expressions2.eval.Value;
+import net.opentsdb.query.processor.expressions2.eval.ExpressionValue;
 
 public class EvaluationContext {
     public static class Builder {
         private EvaluationOptions options;
-        private Map<String, Value> metrics;
+        private Map<String, ExpressionValue> metrics;
 
         public Builder(final EvaluationOptions options) {
             this.options = options;
@@ -18,7 +18,7 @@ public class EvaluationContext {
             metrics = new HashMap<>();
         }
 
-        public Builder define(final String metricName, final Value value) {
+        public Builder define(final String metricName, final ExpressionValue value) {
             metrics.put(metricName, value);
             return this;
         }
@@ -29,8 +29,8 @@ public class EvaluationContext {
     }
 
     private final EvaluationOptions options;
-    private final Map<String, Value> metrics;
-    private final Deque<Value> stack;
+    private final Map<String, ExpressionValue> metrics;
+    private final Deque<ExpressionValue> stack;
 
     private EvaluationContext(final Builder builder) {
         this.options = builder.options;
@@ -39,14 +39,22 @@ public class EvaluationContext {
         stack = new ArrayDeque<>();
     }
 
-    public void push(final Value value) {
+    public void push(final ExpressionValue value) {
         stack.addFirst(value);
     }
 
-    public Value pop() {
-        final Value result = stack.pollFirst();
+    public ExpressionValue pop() {
+        final ExpressionValue result = stack.pollFirst();
         if (null == result) {
             throw new ExpressionException("tried to pop from empty stack in EvaluationContext");
+        }
+        return result;
+    }
+
+    public ExpressionValue peek() {
+        final ExpressionValue result = stack.peekFirst();
+        if (null == result) {
+            throw new ExpressionException("tried to peek at top of empty stack in EvaluationContext");
         }
         return result;
     }
@@ -55,8 +63,8 @@ public class EvaluationContext {
         return stack.size();
     }
 
-    public Value lookup(final String metricName) {
-        final Value result = metrics.get(metricName);
+    public ExpressionValue lookup(final String metricName) {
+        final ExpressionValue result = metrics.get(metricName);
         if (null == result) {
             throw new ExpressionException("tried to look up an undefined metric name in EvaluationContext");
         }

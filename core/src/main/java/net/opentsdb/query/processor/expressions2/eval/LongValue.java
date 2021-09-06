@@ -1,9 +1,9 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public class LongConstantValue extends NumericValue<Long> {
+public class LongValue extends NumericValue<Long> {
     long underlying;
 
-    public LongConstantValue(final long value) {
+    public LongValue(final long value) {
         this.underlying = value;
     }
 
@@ -12,65 +12,65 @@ public class LongConstantValue extends NumericValue<Long> {
     }
 
     @Override
-    public Value makeCopy() {
-        return new LongConstantValue(underlying);
+    public ExpressionValue makeCopy() {
+        return new LongValue(underlying);
     }
 
     @Override
-    public Value negate() {
+    public ExpressionValue negate() {
         underlying = -underlying;
         return this;
     }
 
     @Override
-    public Value add(final Value value) {
+    public ExpressionValue add(final ExpressionValue value) {
         return value.add(this);
     }
 
     @Override
-    public Value add(final LongConstantValue value) {
+    public ExpressionValue add(final LongValue value) {
         this.underlying += value.underlying;
         return this;
     }
 
     @Override
-    public Value add(final DoubleConstantValue value) {
+    public ExpressionValue add(final DoubleValue value) {
         return value.add(this);
     }
 
     @Override
-    public Value add(final LongArrayValue values) {
+    public ExpressionValue add(final LongArrayValue values) {
         return values.add(this);
     }
 
     @Override
-    public Value add(final DoubleArrayValue values) {
+    public ExpressionValue add(final DoubleArrayValue values) {
         return values.add(this);
     }
 
     @Override
-    public Value subtract(final Value value) {
+    public ExpressionValue subtract(final ExpressionValue value) {
         return value.negate().add(this);
     }
 
     @Override
-    public Value subtract(final LongConstantValue value) {
+    public ExpressionValue subtract(final LongValue value) {
         this.underlying -= value.underlying;
         return this;
     }
 
     @Override
-    public Value subtract(final DoubleConstantValue value) {
+    public ExpressionValue subtract(final DoubleValue value) {
         return value.negate().add(this);
     }
 
     @Override
-    public Value subtract(final LongArrayValue values) {
+    public ExpressionValue subtract(final LongArrayValue values) {
         return values.negate().add(this);
     }
 
     @Override
-    public Value subtract(final DoubleArrayValue values) {
+    public ExpressionValue subtract(final DoubleArrayValue values) {
         return values.negate().add(this);
     }
 
@@ -85,7 +85,7 @@ public class LongConstantValue extends NumericValue<Long> {
         }
 
         if (this.getClass() == other.getClass()) {
-            final LongConstantValue that = (LongConstantValue) other;
+            final LongValue that = (LongValue) other;
             return this.underlying == that.underlying;
         }
 
@@ -94,6 +94,6 @@ public class LongConstantValue extends NumericValue<Long> {
 
     @Override
     public String toString() {
-        return "LongConstantValue{" + underlying + "}";
+        return "LongValue{" + underlying + "}";
     }
 }

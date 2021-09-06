@@ -1,9 +1,9 @@
 package net.opentsdb.query.processor.expressions2;
 
 import net.opentsdb.query.processor.expressions2.eval.BooleanConstantValue;
-import net.opentsdb.query.processor.expressions2.eval.DoubleConstantValue;
-import net.opentsdb.query.processor.expressions2.eval.LongConstantValue;
-import net.opentsdb.query.processor.expressions2.eval.Value;
+import net.opentsdb.query.processor.expressions2.eval.DoubleValue;
+import net.opentsdb.query.processor.expressions2.eval.ExpressionValue;
+import net.opentsdb.query.processor.expressions2.eval.LongValue;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
 import net.opentsdb.query.processor.expressions2.nodes.Bool;
 import net.opentsdb.query.processor.expressions2.nodes.Double;
@@ -25,7 +25,7 @@ public class Evaluator implements ExpressionVisitor {
         parser = new ExpressionParser();
     }
 
-    public Value evaluate(final String expression) {
+    public ExpressionValue evaluate(final String expression) {
         final ExpressionNode parseTree = parser.parse(expression);
 
         parseTree.accept(this);
@@ -39,30 +39,28 @@ public class Evaluator implements ExpressionVisitor {
 
     @Override public void enterAddition(final Addition a) {}
     @Override public void leaveAddition(final Addition a) {
-        final Value rhs = context.pop();
-        final Value lhs = context.pop();
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
         context.push(lhs.add(rhs));
     }
 
     @Override public void enterSubtraction(Subtraction s) {}
     @Override public void leaveSubtraction(Subtraction s) {
-        final Value rhs = context.pop();
-        final Value lhs = context.pop();
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
         context.push(lhs.subtract(rhs));
     }
 
     @Override public void enterBool(final Bool b) {}
     @Override public void leaveBool(final Bool b) {
-        if (Bool.TRUE == b) {
-            context.push(BooleanConstantValue.TRUE);
-        } else {
-            context.push(BooleanConstantValue.FALSE);
-        }
+        context.push(Bool.TRUE == b ?
+            BooleanConstantValue.TRUE :
+            BooleanConstantValue.FALSE);
     }
 
     @Override public void enterLogicalNegation(final LogicalNegation n) {}
     @Override public void leaveLogicalNegation(final LogicalNegation n) {
-        context.push(context.pop().complement());
+        context.push(context.pop().complement()); // bools are immutable
     }
 
     @Override public void enterMetric(final Metric m) {}
@@ -72,16 +70,16 @@ public class Evaluator implements ExpressionVisitor {
 
     @Override public void enterDouble(final Double d) {}
     @Override public void leaveDouble(final Double d) {
-        context.push(new DoubleConstantValue(d.getValue()));
+        context.push(new DoubleValue(d.getValue()));
     }
 
     @Override public void enterLong(final Long l) {}
     @Override public void leaveLong(final Long l) {
-        context.push(new LongConstantValue(l.getValue()));
+        context.push(new LongValue(l.getValue()));
     }
 
     @Override public void enterNumericNegation(final NumericNegation n) {}
     @Override public void leaveNumericNegation(final NumericNegation n) {
-        context.push(context.pop().negate());
+        context.peek().negate();
     }
 }

@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import net.opentsdb.query.processor.expressions2.eval.BooleanConstantValue;
 import net.opentsdb.query.processor.expressions2.eval.DoubleArrayValue;
-import net.opentsdb.query.processor.expressions2.eval.DoubleConstantValue;
+import net.opentsdb.query.processor.expressions2.eval.DoubleValue;
+import net.opentsdb.query.processor.expressions2.eval.ExpressionValue;
 import net.opentsdb.query.processor.expressions2.eval.LongArrayValue;
-import net.opentsdb.query.processor.expressions2.eval.LongConstantValue;
-import net.opentsdb.query.processor.expressions2.eval.Value;
+import net.opentsdb.query.processor.expressions2.eval.LongValue;
 import org.junit.Test;
 
 public class TestEvaluator {
@@ -27,20 +27,20 @@ public class TestEvaluator {
 
         final Evaluator evaluator = new Evaluator(context);
 
-        final Map<String, Value> examples = new HashMap<String, Value>() {{
+        final Map<String, ExpressionValue> examples = new HashMap<String, ExpressionValue>() {{
             put("true", BooleanConstantValue.TRUE);
             put("FaLsE", BooleanConstantValue.FALSE);
             put("!TrUe", BooleanConstantValue.FALSE);
             put("!false", BooleanConstantValue.TRUE);
-            put("1 + 2", new LongConstantValue(3));
-            put("2 + 3.14159265", new DoubleConstantValue(5.14159265));
+            put("1 + 2", new LongValue(3));
+            put("2 + 3.14159265", new DoubleValue(5.14159265));
             put("nat + 1", new LongArrayValue(new long[] {1, 2, 3, 4, 5}));
             put("nat + 2.5", new DoubleArrayValue(new double[] {2.5, 3.5, 4.5, 5.5, 6.5}));
             put("nat + 2.0", new LongArrayValue(new long [] {2, 3, 4, 5, 6}));
             put("2.0 + nat", new LongArrayValue(new long [] {2, 3, 4, 5, 6}));
             put("nat + natSquared", new LongArrayValue(new long[] {0, 2, 6, 12, 20}));
             put("natSquared + ieee754 + nat", new DoubleArrayValue(new double[] {1.25, 5d, 6.7, 20.1, 24.75}));
-            put("7 - 3", new LongConstantValue(4));
+            put("7 - 3", new LongValue(4));
             put("nat - 2", new LongArrayValue(new long[] {-2, -1, 0, 1, 2}));
             put("-(nat - 2)", new LongArrayValue(new long[] {2, 1, 0, -1, -2}));
             put("nat - 1.5", new DoubleArrayValue(new double[] {-1.5, -0.5, 0.5, 1.5, 2.5}));
@@ -54,9 +54,8 @@ public class TestEvaluator {
             put("natSquared - ieee754 + nat", new DoubleArrayValue(new double[] {-1.25, -1d, 5.3, 3.9, 15.25}));
         }};
 
-        for (final Map.Entry<String, Value> example : examples.entrySet()) {
-            final Value result = evaluator.evaluate(example.getKey());
-            assertEquals(example.getValue(), result);
+        for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
+            assertEquals(example.getValue(), evaluator.evaluate(example.getKey()));
         }
     }
 }
