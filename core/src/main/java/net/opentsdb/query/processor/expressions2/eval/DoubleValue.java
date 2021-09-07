@@ -97,7 +97,10 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue subtract(final DoubleArrayValue values) {
-        return values.negate().add(this);
+        for (int i = 0; i < values.underlying.length; ++i) {
+            values.underlying[i] = this.underlying - values.underlying[i];
+        }
+        return values;
     }
 
     @Override

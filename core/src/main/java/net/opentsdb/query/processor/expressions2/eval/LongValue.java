@@ -61,17 +61,24 @@ public class LongValue extends NumericValue<Long> {
 
     @Override
     public ExpressionValue subtract(final DoubleValue value) {
-        return value.negate().add(this);
+        value.underlying = this.underlying - value.underlying;
+        return value;
     }
 
     @Override
     public ExpressionValue subtract(final LongArrayValue values) {
-        return values.negate().add(this);
+        for (int i = 0; i < values.underlying.length; ++i) {
+            values.underlying[i] = this.underlying - values.underlying[i];
+        }
+        return values;
     }
 
     @Override
     public ExpressionValue subtract(final DoubleArrayValue values) {
-        return values.negate().add(this);
+        for (int i = 0; i < values.underlying.length; ++i) {
+            values.underlying[i] = (double) this.underlying - values.underlying[i];
+        }
+        return values;
     }
 
     @Override
