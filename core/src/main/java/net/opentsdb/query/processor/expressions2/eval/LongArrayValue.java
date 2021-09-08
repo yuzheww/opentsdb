@@ -1,6 +1,5 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-import com.google.common.math.DoubleMath;
 import com.google.common.primitives.Longs;
 import java.util.Arrays;
 import net.opentsdb.pools.PooledObject;
@@ -84,16 +83,16 @@ public class LongArrayValue extends NumericValue<Long> {
     @Override
     public ExpressionValue add(final DoubleValue value) {
         // Can we possibly avoid converting this array?
-        final double addend = value.getValue();
-        if (DoubleMath.isMathematicalInteger(addend)) {
+        if (value.isExactLong()) {
             // Yes, the addend is exactly representable as a long.
-            final long lval = (long) addend;
+            final long addend = (long) value.getValue();
             for (int i = 0; i < underlying.length; ++i) {
-                underlying[i] += lval;
+                underlying[i] += addend;
             }
             return this;
         } else {
             // No, we need to create a double array.
+            final double addend = value.getValue();
             final PooledObject newUnderlying = getFactory().makeDoubleArray(
                 underlying.length);
             final DoubleArrayValue newValue = new DoubleArrayValue(getFactory(),
@@ -138,16 +137,16 @@ public class LongArrayValue extends NumericValue<Long> {
     @Override
     public ExpressionValue subtract(final DoubleValue value) {
         // Can we possibly avoid converting this array?
-        final double subtrahend = value.getValue();
-        if (DoubleMath.isMathematicalInteger(subtrahend)) {
+        if (value.isExactLong()) {
             // Yes, the subtrahend is exactly representable as a long.
-            final long lval = (long) subtrahend;
+            final long subtrahend = (long) value.getValue();
             for (int i = 0; i < underlying.length; ++i) {
-                underlying[i] -= lval;
+                underlying[i] -= subtrahend;
             }
             return this;
         } else {
             // No, we need to create a double array.
+            final double subtrahend = value.getValue();
             final PooledObject newUnderlying = getFactory().makeDoubleArray(
                 underlying.length);
             final DoubleArrayValue newValue = new DoubleArrayValue(getFactory(),

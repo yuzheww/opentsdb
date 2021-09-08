@@ -15,6 +15,10 @@ public class DoubleValue extends NumericValue<Double> {
         return underlying;
     }
 
+    public boolean isExactLong() {
+        return DoubleMath.isMathematicalInteger(underlying);
+    }
+
     @Override
     public void close() { }
 
