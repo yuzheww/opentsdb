@@ -13,6 +13,9 @@ public class BooleanConstantValue implements ExpressionValue {
     public static final BooleanConstantValue FALSE = new BooleanConstantValue(false);
 
     @Override
+    public void close() { }
+
+    @Override
     public ExpressionValue makeCopy() {
         return this; // no such thing -- immutable object
     }

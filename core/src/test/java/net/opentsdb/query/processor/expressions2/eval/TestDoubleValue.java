@@ -40,6 +40,8 @@ public class TestDoubleValue {
         x.add(u);
 
         assertEquals(7d, x.getValue(), 1e-1); // LHS unchanged
-        assertArrayEquals(new double[] {7.65, 11.3}, u.getUnderlying(), 1e-3); // RHS mutated
+        assertEquals(2, u.getLength());
+        assertEquals(7.65, u.getValueAt(0), 1e-3); // RHS mutated
+        assertEquals(11.3, u.getValueAt(1), 1e-3); // RHS mutated
     }
 }

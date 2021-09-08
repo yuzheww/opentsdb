@@ -25,6 +25,11 @@ public class Evaluator implements ExpressionVisitor {
         parser = new ExpressionParser();
     }
 
+    /**
+     * Evaluate the given expression using the configured context.
+     * @return An AutoCloseable object with backing storage that may still be
+     * held by an object pool.
+     */
     public ExpressionValue evaluate(final String expression) {
         final ExpressionNode parseTree = parser.parse(expression);
 

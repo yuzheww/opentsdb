@@ -12,6 +12,9 @@ public class LongValue extends NumericValue<Long> {
     }
 
     @Override
+    public void close() { }
+
+    @Override
     public ExpressionValue makeCopy() {
         return new LongValue(underlying);
     }
@@ -35,16 +38,19 @@ public class LongValue extends NumericValue<Long> {
 
     @Override
     public ExpressionValue add(final DoubleValue value) {
+        // Defer to DoubleValue implementation.
         return value.add(this);
     }
 
     @Override
     public ExpressionValue add(final LongArrayValue values) {
+        // Defer to LongArrayValue implementation.
         return values.add(this);
     }
 
     @Override
     public ExpressionValue add(final DoubleArrayValue values) {
+        // Defer to DoubleArrayValue implementation.
         return values.add(this);
     }
 

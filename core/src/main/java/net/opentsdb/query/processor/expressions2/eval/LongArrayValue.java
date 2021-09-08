@@ -3,20 +3,51 @@ package net.opentsdb.query.processor.expressions2.eval;
 import com.google.common.math.DoubleMath;
 import com.google.common.primitives.Longs;
 import java.util.Arrays;
+import net.opentsdb.pools.PooledObject;
 
 public class LongArrayValue extends NumericValue<Long> {
-    final long[] underlying;
+    private final PooledObject pooledObject;
+    long[] underlying;
 
+    /**
+     * Construct directly from a raw array.
+     * @param values
+     */
     public LongArrayValue(final long[] values) {
+        pooledObject = null;
         underlying = values;
+    }
+
+    /**
+     * Construct from a pooled array.
+     * @param arrObj
+     */
+    public LongArrayValue(final PooledObject arrObj) {
+        pooledObject = arrObj;
+        underlying = (long[]) arrObj.object();
+    }
+
+    /**
+     * @return True only if this value still has backing storage.
+     */
+    public boolean isLive() {
+        return null != underlying;
+    }
+
+    public int getLength() {
+        return underlying.length;
     }
 
     public long getValueAt(int idx) {
         return underlying[idx];
     }
 
-    public long[] getUnderlying() {
-        return underlying;
+    @Override
+    public void close() {
+        underlying = null;
+        if (null != pooledObject) {
+            pooledObject.release();
+        }
     }
 
     @Override
@@ -62,6 +93,7 @@ public class LongArrayValue extends NumericValue<Long> {
             for (int i = 0; i < underlying.length; ++i) {
                 doubles[i] = (double) underlying[i] + addend;
             }
+            this.close();
             return new DoubleArrayValue(doubles);
         }
     }
@@ -71,6 +103,7 @@ public class LongArrayValue extends NumericValue<Long> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 
@@ -120,12 +153,17 @@ public class LongArrayValue extends NumericValue<Long> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 
     @Override
     public ExpressionValue subtract(final DoubleArrayValue values) {
-        return values.negate().add(this);
+        for (int i = 0; i < values.underlying.length; ++i) {
+            values.underlying[i] = (double) this.underlying[i] - values.underlying[i];
+        }
+        this.close();
+        return values;
     }
 
     @Override

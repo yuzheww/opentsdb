@@ -3,20 +3,28 @@ package net.opentsdb.query.processor.expressions2;
 public class EvaluationOptions {
     public static class Builder {
         private boolean infectiousNaN;
-        private boolean useFloatingPointDivision;
+        private boolean forceFloatingPointDivision;
 
         public Builder() {
             infectiousNaN = false;
-            useFloatingPointDivision = true;
+            forceFloatingPointDivision = true;
         }
 
+        /**
+         * @param flag
+         */
         public Builder setInfectiousNaN(final boolean flag) {
             this.infectiousNaN = flag;
             return this;
         }
 
-        public Builder setUseFloatingPointDivision(final boolean flag) {
-            this.useFloatingPointDivision = flag;
+        /**
+         * If flag is true, which is the default value, then evaluation will
+         * always use floating-point division, even with long-valued operands.
+         * @param flag
+         */
+        public Builder setForceFloatingPointDivision(final boolean flag) {
+            this.forceFloatingPointDivision = flag;
             return this;
         }
 
@@ -26,18 +34,18 @@ public class EvaluationOptions {
     }
 
     private final boolean infectiousNaN;
-    private final boolean useFloatingPointDivision;
+    private final boolean forceFloatingPointDivision;
 
     private EvaluationOptions(final Builder builder) {
         this.infectiousNaN = builder.infectiousNaN;
-        this.useFloatingPointDivision = builder.useFloatingPointDivision;
+        this.forceFloatingPointDivision = builder.forceFloatingPointDivision;
     }
 
     public boolean getInfectiousNaN() {
         return infectiousNaN;
     }
 
-    public boolean getUseFloatingPointDivision() {
-        return useFloatingPointDivision;
+    public boolean getForceFloatingPointDivision() {
+        return forceFloatingPointDivision;
     }
 }

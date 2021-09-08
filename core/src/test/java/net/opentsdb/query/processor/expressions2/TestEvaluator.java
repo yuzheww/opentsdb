@@ -14,9 +14,10 @@ import org.junit.Test;
 
 public class TestEvaluator {
     @Test
-    public void testByExample() {
+    public void testByExample() throws Exception {
         final EvaluationOptions options = new EvaluationOptions.Builder().
             setInfectiousNaN(false).
+            setForceFloatingPointDivision(true).
             build();
 
         final EvaluationContext context = new EvaluationContext.Builder(options).
@@ -84,7 +85,9 @@ public class TestEvaluator {
         }};
 
         for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
-            assertEquals(example.getValue(), evaluator.evaluate(example.getKey()));
+            try (final ExpressionValue result = evaluator.evaluate(example.getKey())) {
+                assertEquals(example.getValue(), result);
+            }
         }
     }
 }

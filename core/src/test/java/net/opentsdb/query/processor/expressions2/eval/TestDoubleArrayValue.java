@@ -8,15 +8,10 @@ import org.junit.Test;
 
 public class TestDoubleArrayValue {
     @Test
-    public void testGetUnderlying() {
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {2.71828, 3.14159});
-
-        assertArrayEquals(new double[] {2.71828, 3.14159}, u.getUnderlying(), 1e-6);
-    }
-    @Test
     public void testGetValueAt() {
         final DoubleArrayValue u = new DoubleArrayValue(new double[] {3.14159, 2.71828});
 
+        assertEquals(2, u.getLength());
         assertEquals(3.14159, u.getValueAt(0), 1e-6);
         assertEquals(2.71828, u.getValueAt(1), 1e-6);
     }
@@ -36,8 +31,10 @@ public class TestDoubleArrayValue {
         final DoubleValue x = new DoubleValue(2.1);
         u.add(x);
 
-        assertArrayEquals(new double[] {5.35, 9.6}, u.getUnderlying(), 1e-3); // LHS mutated
-        assertEquals(2.1, x.getValue(), 1e-2); // RHS unchanged
+        assertEquals(2, u.getLength());
+        assertEquals(5.35, u.getValueAt(0), 1e-3); // LHS mutated
+        assertEquals(9.6, u.getValueAt(1), 1e-3); // LHS mutated
+        assertEquals(2.1, x.getValue(), 1e-3); // RHS unchanged
     }
 
     @Test
@@ -46,7 +43,9 @@ public class TestDoubleArrayValue {
         final DoubleArrayValue v = new DoubleArrayValue(new double[] {0.5, 3.25});
         u.add(v);
 
-        assertArrayEquals(new double[] {2.75, 7.25}, u.getUnderlying(), 1e-3); // LHS mutated
-        assertArrayEquals(new double[] {0.5, 3.25}, v.getUnderlying(), 1e-3); // RHS unchanged
+        assertEquals(2, u.getLength());
+        assertEquals(2.75, u.getValueAt(0), 1e-3); // LHS mutated
+        assertEquals(7.25, u.getValueAt(1), 1e-3); // LHS mutated
+        assertFalse(v.isLive()); // RHS released
     }
 }

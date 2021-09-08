@@ -1,6 +1,6 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public interface ExpressionValue {
+public interface ExpressionValue extends AutoCloseable {
     ExpressionValue makeCopy();
 
     ExpressionValue negate();

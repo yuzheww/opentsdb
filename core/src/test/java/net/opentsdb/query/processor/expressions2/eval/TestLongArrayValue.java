@@ -8,15 +8,10 @@ import org.junit.Test;
 
 public class TestLongArrayValue {
     @Test
-    public void testGetUnderlying() {
-        final LongArrayValue u = new LongArrayValue(new long[] {7L, 11L});
-
-        assertArrayEquals(new long[] {7L, 11L}, u.getUnderlying());
-    }
-    @Test
     public void testGetValueAt() {
         final LongArrayValue u = new LongArrayValue(new long[] {7L, 11L});
 
+        assertEquals(2, u.getLength());
         assertEquals(7L, u.getValueAt(0));
         assertEquals(11, u.getValueAt(1));
     }
@@ -36,7 +31,9 @@ public class TestLongArrayValue {
         final LongValue x = new LongValue(3L);
         u.add(x);
 
-        assertArrayEquals(new long[] {17L, 8L}, u.getUnderlying()); // LHS mutated
+        assertEquals(2, u.getLength());
+        assertEquals(17L, u.getValueAt(0)); // LHS mutated
+        assertEquals(8L, u.getValueAt(1)); // LHS mutated
         assertEquals(3L, x.getValue()); // RHS unchanged
     }
 
@@ -46,7 +43,9 @@ public class TestLongArrayValue {
         final LongArrayValue v = new LongArrayValue(new long[] {3L, 4L});
         u.add(v);
 
-        assertArrayEquals(new long[] {4L, 6L}, u.getUnderlying()); // LHS mutated
-        assertArrayEquals(new long[] {3L, 4L}, v.getUnderlying()); // RHS unchanged
+        assertEquals(2, u.getLength());
+        assertEquals(4L, u.getValueAt(0)); // LHS mutated
+        assertEquals(6L, u.getValueAt(1)); // LHS mutated
+        assertFalse(v.isLive()); // RHS released
     }
 }

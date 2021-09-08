@@ -16,6 +16,9 @@ public class DoubleValue extends NumericValue<Double> {
     }
 
     @Override
+    public void close() { }
+
+    @Override
     public ExpressionValue makeCopy() {
         return new DoubleValue(underlying);
     }
@@ -45,26 +48,13 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue add(final LongArrayValue values) {
-        if (DoubleMath.isMathematicalInteger(underlying)) {
-            // This double constant is representable as a long.
-            final long addend = (long) underlying;
-            for (int i = 0; i < values.underlying.length; ++i) {
-                values.underlying[i] += addend;
-            }
-            return values;
-        } else {
-            // Must convert to double array.
-            final long[] longs = values.underlying;
-            final double[] doubles = new double[longs.length];
-            for (int i = 0; i < longs.length; ++i) {
-                doubles[i] = underlying + (double) longs[i];
-            }
-            return new DoubleArrayValue(doubles);
-        }
+        // Defer to LongArrayValue implementation.
+        return values.add(this);
     }
 
     @Override
     public ExpressionValue add(final DoubleArrayValue values) {
+        // Defer to DoubleArrayValue implementation.
         return values.add(this);
     }
 
@@ -87,7 +77,7 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue subtract(final LongArrayValue values) {
-        final long[] longs = values.getUnderlying();
+        final long[] longs = values.underlying;
         final double[] doubles = new double[longs.length];
         for (int i = 0; i < longs.length; ++i) {
             doubles[i] = underlying - (double) longs[i];

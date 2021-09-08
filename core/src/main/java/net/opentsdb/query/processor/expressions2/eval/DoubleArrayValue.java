@@ -3,20 +3,51 @@ package net.opentsdb.query.processor.expressions2.eval;
 import com.google.common.math.DoubleMath;
 import com.google.common.primitives.Doubles;
 import java.util.Arrays;
+import net.opentsdb.pools.PooledObject;
 
 public class DoubleArrayValue extends NumericValue<Double> {
-    final double[] underlying;
+    private final PooledObject pooledObject;
+    double[] underlying;
 
+    /**
+     * Construct directly from a raw array.
+     * @param values
+     */
     public DoubleArrayValue(final double[] values) {
+        pooledObject = null;
         underlying = values;
+    }
+
+    /**
+     * Construct from a pooled array.
+     * @param arrObj
+     */
+    public DoubleArrayValue(final PooledObject arrObj) {
+        pooledObject = arrObj;
+        underlying = (double[]) arrObj.object();
+    }
+
+    /**
+     * @return True only if this value still has backing storage.
+     */
+    public boolean isLive() {
+        return null != underlying;
+    }
+
+    public int getLength() {
+        return underlying.length;
     }
 
     public double getValueAt(int idx) {
         return underlying[idx];
     }
 
-    public double[] getUnderlying() {
-        return underlying;
+    @Override
+    public void close() {
+        underlying = null;
+        if (null != pooledObject) {
+            pooledObject.release();
+        }
     }
 
     @Override
@@ -59,6 +90,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += (double) values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 
@@ -67,6 +99,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] += values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 
@@ -97,6 +130,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= (double) values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 
@@ -105,6 +139,7 @@ public class DoubleArrayValue extends NumericValue<Double> {
         for (int i = 0; i < underlying.length; ++i) {
             underlying[i] -= values.getValueAt(i);
         }
+        values.close();
         return this;
     }
 

@@ -40,6 +40,8 @@ public class TestLongValue {
         x.add(u);
 
         assertEquals(1L, x.getValue()); // LHS unchanged
-        assertArrayEquals(new long[] {1L, 6L}, u.getUnderlying()); // RHS mutated
+        assertEquals(2, u.getLength());
+        assertEquals(1L, u.getValueAt(0)); // RHS mutated
+        assertEquals(6L, u.getValueAt(1)); // RHS mutated
     }
 }
