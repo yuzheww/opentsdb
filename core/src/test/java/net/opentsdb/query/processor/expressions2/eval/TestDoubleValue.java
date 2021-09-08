@@ -6,17 +6,21 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class TestDoubleValue {
+public class TestDoubleValue extends FactoryBasedTest {
+    public TestDoubleValue() {
+        super(2);
+    }
+
     @Test
     public void testGetValue() {
-        final DoubleValue x = new DoubleValue(3.14159265);
+        final DoubleValue x = new DoubleValue(factory, 3.14159265);
 
         assertEquals(3.14159265, x.getValue(), 1e-9);
     }
 
     @Test
     public void testMakeCopy() {
-        final DoubleValue x = new DoubleValue(2.71828);
+        final DoubleValue x = new DoubleValue(factory, 2.71828);
         final ExpressionValue y = x.makeCopy();
 
         assertEquals(x, y); // same underlying value
@@ -25,8 +29,8 @@ public class TestDoubleValue {
 
     @Test
     public void testAddDouble() {
-        final DoubleValue x = new DoubleValue(2.5);
-        final DoubleValue y = new DoubleValue(9.6);
+        final DoubleValue x = new DoubleValue(factory, 2.5);
+        final DoubleValue y = new DoubleValue(factory, 9.6);
         x.add(y);
 
         assertEquals(12.1, x.getValue(), 1e-2); // LHS mutated
@@ -35,8 +39,8 @@ public class TestDoubleValue {
 
     @Test
     public void testAddDoubleArray() {
-        final DoubleValue x = new DoubleValue(7d);
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {0.65, 4.3});
+        final DoubleValue x = new DoubleValue(factory, 7d);
+        final DoubleArrayValue u = new DoubleArrayValue(factory, new double[] {0.65, 4.3});
         x.add(u);
 
         assertEquals(7d, x.getValue(), 1e-1); // LHS unchanged

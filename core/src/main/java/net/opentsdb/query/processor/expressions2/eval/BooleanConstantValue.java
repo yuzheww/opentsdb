@@ -2,15 +2,16 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import net.opentsdb.query.processor.expressions2.ExpressionException;
 
-public class BooleanConstantValue implements ExpressionValue {
+public class BooleanConstantValue extends ExpressionValue {
     private final boolean underlying;
 
-    private BooleanConstantValue(final boolean value) {
+    private BooleanConstantValue(final ExpressionFactory factory, final boolean value) {
+        super(factory);
         this.underlying = value;
     }
 
-    public static final BooleanConstantValue TRUE = new BooleanConstantValue(true);
-    public static final BooleanConstantValue FALSE = new BooleanConstantValue(false);
+    public static final BooleanConstantValue TRUE = new BooleanConstantValue(null, true);
+    public static final BooleanConstantValue FALSE = new BooleanConstantValue(null, false);
 
     @Override
     public void close() { }

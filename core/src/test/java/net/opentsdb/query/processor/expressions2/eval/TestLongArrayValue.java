@@ -6,10 +6,14 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-public class TestLongArrayValue {
+public class TestLongArrayValue extends FactoryBasedTest {
+    public TestLongArrayValue() {
+        super(2);
+    }
+
     @Test
     public void testGetValueAt() {
-        final LongArrayValue u = new LongArrayValue(new long[] {7L, 11L});
+        final LongArrayValue u = new LongArrayValue(factory, new long[] {7L, 11L});
 
         assertEquals(2, u.getLength());
         assertEquals(7L, u.getValueAt(0));
@@ -18,7 +22,7 @@ public class TestLongArrayValue {
 
     @Test
     public void testMakeCopy() {
-        final LongArrayValue u = new LongArrayValue(new long[] {1L, 0L});
+        final LongArrayValue u = new LongArrayValue(factory, new long[] {1L, 0L});
         final ExpressionValue v = u.makeCopy();
 
         assertEquals(u, v); // same underlying value
@@ -27,8 +31,8 @@ public class TestLongArrayValue {
 
     @Test
     public void testAddLong() {
-        final LongArrayValue u = new LongArrayValue(new long[] {14L, 5L});
-        final LongValue x = new LongValue(3L);
+        final LongArrayValue u = new LongArrayValue(factory, new long[] {14L, 5L});
+        final LongValue x = new LongValue(factory, 3L);
         u.add(x);
 
         assertEquals(2, u.getLength());
@@ -39,8 +43,8 @@ public class TestLongArrayValue {
 
     @Test
     public void testAddLongArray() {
-        final LongArrayValue u = new LongArrayValue(new long[] {1L, 2L});
-        final LongArrayValue v = new LongArrayValue(new long[] {3L, 4L});
+        final LongArrayValue u = new LongArrayValue(factory, new long[] {1L, 2L});
+        final LongArrayValue v = new LongArrayValue(factory, new long[] {3L, 4L});
         u.add(v);
 
         assertEquals(2, u.getLength());

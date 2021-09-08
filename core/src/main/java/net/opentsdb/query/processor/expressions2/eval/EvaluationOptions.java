@@ -1,4 +1,4 @@
-package net.opentsdb.query.processor.expressions2;
+package net.opentsdb.query.processor.expressions2.eval;
 
 public class EvaluationOptions {
     public static class Builder {

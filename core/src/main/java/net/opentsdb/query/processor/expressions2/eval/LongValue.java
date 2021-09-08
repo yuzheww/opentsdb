@@ -3,7 +3,8 @@ package net.opentsdb.query.processor.expressions2.eval;
 public class LongValue extends NumericValue<Long> {
     long underlying;
 
-    public LongValue(final long value) {
+    public LongValue(final ExpressionFactory factory, final long value) {
+        super(factory);
         this.underlying = value;
     }
 
@@ -16,7 +17,7 @@ public class LongValue extends NumericValue<Long> {
 
     @Override
     public ExpressionValue makeCopy() {
-        return new LongValue(underlying);
+        return new LongValue(getFactory(), underlying);
     }
 
     @Override

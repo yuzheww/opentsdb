@@ -1,13 +1,13 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
 import com.google.common.math.DoubleMath;
+import net.opentsdb.pools.PooledObject;
 
 public class DoubleValue extends NumericValue<Double> {
-    public static final DoubleValue NAN = new DoubleValue(Double.NaN);
-
     double underlying;
 
-    public DoubleValue(final double value) {
+    public DoubleValue(final ExpressionFactory factory, final double value) {
+        super(factory);
         this.underlying = value;
     }
 
@@ -20,7 +20,7 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue makeCopy() {
-        return new DoubleValue(underlying);
+        return new DoubleValue(getFactory(), underlying);
     }
 
     @Override
@@ -77,12 +77,13 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue subtract(final LongArrayValue values) {
-        final long[] longs = values.underlying;
-        final double[] doubles = new double[longs.length];
-        for (int i = 0; i < longs.length; ++i) {
-            doubles[i] = underlying - (double) longs[i];
+        final PooledObject newUnderlying = getFactory().makeDoubleArray(values.underlying.length);
+        final DoubleArrayValue newValue = new DoubleArrayValue(getFactory(), newUnderlying);
+        for (int i = 0; i < values.underlying.length; ++i) {
+            newValue.underlying[i] = this.underlying - (double) values.underlying[i];
         }
-        return new DoubleArrayValue(doubles);
+        values.close();
+        return newValue;
     }
 
     @Override

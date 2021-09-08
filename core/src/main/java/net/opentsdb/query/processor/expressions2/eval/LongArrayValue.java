@@ -11,18 +11,22 @@ public class LongArrayValue extends NumericValue<Long> {
 
     /**
      * Construct directly from a raw array.
+     * @param factory
      * @param values
      */
-    public LongArrayValue(final long[] values) {
+    public LongArrayValue(final ExpressionFactory factory, final long[] values) {
+        super(factory);
         pooledObject = null;
         underlying = values;
     }
 
     /**
      * Construct from a pooled array.
+     * @param factory
      * @param arrObj
      */
-    public LongArrayValue(final PooledObject arrObj) {
+    public LongArrayValue(final ExpressionFactory factory, final PooledObject arrObj) {
+        super(factory);
         pooledObject = arrObj;
         underlying = (long[]) arrObj.object();
     }
@@ -52,7 +56,8 @@ public class LongArrayValue extends NumericValue<Long> {
 
     @Override
     public ExpressionValue makeCopy() {
-        return new LongArrayValue(Arrays.copyOf(underlying, underlying.length));
+        final PooledObject newUnderlying = getFactory().copyLongArray(underlying);
+        return new LongArrayValue(getFactory(), newUnderlying);
     }
 
     @Override
@@ -89,12 +94,15 @@ public class LongArrayValue extends NumericValue<Long> {
             return this;
         } else {
             // No, we need to create a double array.
-            final double[] doubles = new double[underlying.length];
+            final PooledObject newUnderlying = getFactory().makeDoubleArray(
+                underlying.length);
+            final DoubleArrayValue newValue = new DoubleArrayValue(getFactory(),
+                newUnderlying);
             for (int i = 0; i < underlying.length; ++i) {
-                doubles[i] = (double) underlying[i] + addend;
+                newValue.underlying[i] = (double) underlying[i] + addend;
             }
             this.close();
-            return new DoubleArrayValue(doubles);
+            return newValue;
         }
     }
 
@@ -140,11 +148,15 @@ public class LongArrayValue extends NumericValue<Long> {
             return this;
         } else {
             // No, we need to create a double array.
-            final double[] doubles = new double[underlying.length];
+            final PooledObject newUnderlying = getFactory().makeDoubleArray(
+                underlying.length);
+            final DoubleArrayValue newValue = new DoubleArrayValue(getFactory(),
+                newUnderlying);
             for (int i = 0; i < underlying.length; ++i) {
-                doubles[i] = (double) underlying[i] - subtrahend;
+                newValue.underlying[i] = (double) underlying[i] - subtrahend;
             }
-            return new DoubleArrayValue(doubles);
+            this.close();
+            return newValue;
         }
     }
 

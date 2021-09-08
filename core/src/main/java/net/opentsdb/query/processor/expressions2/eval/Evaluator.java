@@ -1,9 +1,7 @@
-package net.opentsdb.query.processor.expressions2;
+package net.opentsdb.query.processor.expressions2.eval;
 
-import net.opentsdb.query.processor.expressions2.eval.BooleanConstantValue;
-import net.opentsdb.query.processor.expressions2.eval.DoubleValue;
-import net.opentsdb.query.processor.expressions2.eval.ExpressionValue;
-import net.opentsdb.query.processor.expressions2.eval.LongValue;
+import net.opentsdb.query.processor.expressions2.ExpressionException;
+import net.opentsdb.query.processor.expressions2.ExpressionParser;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
 import net.opentsdb.query.processor.expressions2.nodes.Bool;
 import net.opentsdb.query.processor.expressions2.nodes.Double;
@@ -16,10 +14,13 @@ import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 
 public class Evaluator implements ExpressionVisitor {
+    private final ExpressionFactory factory;
     private final EvaluationContext context;
     private final ExpressionParser parser;
 
-    public Evaluator(final EvaluationContext context) {
+    public Evaluator(final ExpressionFactory factory,
+            final EvaluationContext context) {
+        this.factory = factory;
         this.context = context;
 
         parser = new ExpressionParser();
@@ -75,12 +76,12 @@ public class Evaluator implements ExpressionVisitor {
 
     @Override public void enterDouble(final Double d) {}
     @Override public void leaveDouble(final Double d) {
-        context.push(new DoubleValue(d.getValue()));
+        context.push(factory.makeValueFrom(d.getValue()));
     }
 
     @Override public void enterLong(final Long l) {}
     @Override public void leaveLong(final Long l) {
-        context.push(new LongValue(l.getValue()));
+        context.push(factory.makeValueFrom(l.getValue()));
     }
 
     @Override public void enterNumericNegation(final NumericNegation n) {}

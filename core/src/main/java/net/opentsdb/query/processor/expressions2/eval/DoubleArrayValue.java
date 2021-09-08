@@ -11,18 +11,22 @@ public class DoubleArrayValue extends NumericValue<Double> {
 
     /**
      * Construct directly from a raw array.
+     * @param factory
      * @param values
      */
-    public DoubleArrayValue(final double[] values) {
+    public DoubleArrayValue(final ExpressionFactory factory, final double[] values) {
+        super(factory);
         pooledObject = null;
         underlying = values;
     }
 
     /**
      * Construct from a pooled array.
+     * @param factory
      * @param arrObj
      */
-    public DoubleArrayValue(final PooledObject arrObj) {
+    public DoubleArrayValue(final ExpressionFactory factory, final PooledObject arrObj) {
+        super(factory);
         pooledObject = arrObj;
         underlying = (double[]) arrObj.object();
     }
@@ -52,7 +56,8 @@ public class DoubleArrayValue extends NumericValue<Double> {
 
     @Override
     public ExpressionValue makeCopy() {
-        return new DoubleArrayValue(Arrays.copyOf(underlying, underlying.length));
+        final PooledObject newUnderlying = getFactory().copyDoubleArray(underlying);
+        return new DoubleArrayValue(getFactory(), newUnderlying);
     }
 
     @Override

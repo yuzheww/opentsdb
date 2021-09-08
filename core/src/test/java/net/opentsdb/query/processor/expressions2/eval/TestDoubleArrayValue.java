@@ -6,10 +6,14 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
-public class TestDoubleArrayValue {
+public class TestDoubleArrayValue extends FactoryBasedTest {
+    public TestDoubleArrayValue() {
+        super(2);
+    }
+
     @Test
     public void testGetValueAt() {
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {3.14159, 2.71828});
+        final DoubleArrayValue u = new DoubleArrayValue(factory, new double[] {3.14159, 2.71828});
 
         assertEquals(2, u.getLength());
         assertEquals(3.14159, u.getValueAt(0), 1e-6);
@@ -18,7 +22,7 @@ public class TestDoubleArrayValue {
 
     @Test
     public void testMakeCopy() {
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {1d, 0d});
+        final DoubleArrayValue u = new DoubleArrayValue(factory, new double[] {1d, 0d});
         final ExpressionValue v = u.makeCopy();
 
         assertEquals(u, v); // same underlying value
@@ -27,8 +31,8 @@ public class TestDoubleArrayValue {
 
     @Test
     public void testAddDouble() {
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {3.25, 7.5});
-        final DoubleValue x = new DoubleValue(2.1);
+        final DoubleArrayValue u = new DoubleArrayValue(factory, new double[] {3.25, 7.5});
+        final DoubleValue x = new DoubleValue(factory, 2.1);
         u.add(x);
 
         assertEquals(2, u.getLength());
@@ -39,8 +43,8 @@ public class TestDoubleArrayValue {
 
     @Test
     public void testAddDoubleArray() {
-        final DoubleArrayValue u = new DoubleArrayValue(new double[] {2.25, 4d});
-        final DoubleArrayValue v = new DoubleArrayValue(new double[] {0.5, 3.25});
+        final DoubleArrayValue u = new DoubleArrayValue(factory, new double[] {2.25, 4d});
+        final DoubleArrayValue v = new DoubleArrayValue(factory, new double[] {0.5, 3.25});
         u.add(v);
 
         assertEquals(2, u.getLength());

@@ -1,20 +1,30 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public interface ExpressionValue extends AutoCloseable {
-    ExpressionValue makeCopy();
+public abstract class ExpressionValue implements AutoCloseable {
+    private final ExpressionFactory factory;
 
-    ExpressionValue negate();
-    ExpressionValue complement();
+    public ExpressionValue(final ExpressionFactory factory) {
+        this.factory = factory;
+    }
 
-    ExpressionValue add(ExpressionValue value);
-    ExpressionValue add(LongValue value);
-    ExpressionValue add(DoubleValue value);
-    ExpressionValue add(LongArrayValue values);
-    ExpressionValue add(DoubleArrayValue values);
+    public ExpressionFactory getFactory() {
+        return factory;
+    }
 
-    ExpressionValue subtract(ExpressionValue value);
-    ExpressionValue subtract(LongValue value);
-    ExpressionValue subtract(DoubleValue value);
-    ExpressionValue subtract(LongArrayValue values);
-    ExpressionValue subtract(DoubleArrayValue values);
+    public abstract ExpressionValue makeCopy();
+
+    public abstract ExpressionValue negate();
+    public abstract ExpressionValue complement();
+
+    public abstract ExpressionValue add(ExpressionValue value);
+    public abstract ExpressionValue add(LongValue value);
+    public abstract ExpressionValue add(DoubleValue value);
+    public abstract ExpressionValue add(LongArrayValue values);
+    public abstract ExpressionValue add(DoubleArrayValue values);
+
+    public abstract ExpressionValue subtract(ExpressionValue value);
+    public abstract ExpressionValue subtract(LongValue value);
+    public abstract ExpressionValue subtract(DoubleValue value);
+    public abstract ExpressionValue subtract(LongArrayValue values);
+    public abstract ExpressionValue subtract(DoubleArrayValue values);
 }
