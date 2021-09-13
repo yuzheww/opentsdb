@@ -31,12 +31,13 @@ public class EvaluationOptions {
         }
 
         /**
+         * If flag is false, which is the default value, then any evaluation
+         * will consume metrics from the EvaluationContext. This minimizes
+         * copies, but you cannot reuse the context object.
+         *
          * If flag is true, then evaluation will make copies of all metrics
          * defined in the EvaluationContext as needed so that the same context
-         * may be reused for multiple evaluations.
-         *
-         * However, if flag is false, which is the default value, then any
-         * evaluation operation will consume metrics from the EvaluationContext.
+         * object may be used for multiple evaluations.
          * @param flag
          */
         public Builder setAllowMetricReuse(final boolean flag) {

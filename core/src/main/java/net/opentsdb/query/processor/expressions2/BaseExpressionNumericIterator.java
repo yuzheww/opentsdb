@@ -13,7 +13,6 @@ import net.opentsdb.pools.DoubleArrayPool;
 import net.opentsdb.pools.LongArrayPool;
 import net.opentsdb.query.QueryIterator;
 import net.opentsdb.query.QueryNode;
-import net.opentsdb.query.QueryResult;
 import net.opentsdb.query.processor.expressions.ExpressionConfig;
 
 public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType>
@@ -22,8 +21,14 @@ public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType
 
     protected final Evaluator evaluator;
 
+    /**
+     * C-tor.
+     * @param tsdb
+     * @param config
+     * @param sources
+     */
     public BaseExpressionNumericIterator(final TSDB tsdb,
-            final ExpressionConfig config, final QueryResult result,
+            final ExpressionConfig config,
             final Map<String, TimeSeries> sources) {
         // Initialze state objects.
         nextTimestamp = new MillisecondTimeStamp(0);
@@ -32,6 +37,7 @@ public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType
         final EvaluationOptions options = new EvaluationOptions.Builder().
             setInfectiousNaN(config.getInfectiousNan()).
             setForceFloatingPointDivision(true). // TODO: make this configurable
+            setAllowMetricReuse(false). // contexts will not be reusable
             build();
 
         // Fetch the pools we need from TSDB.
