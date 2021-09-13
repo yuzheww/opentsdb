@@ -1,6 +1,7 @@
 package net.opentsdb.query.processor.expressions2;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,8 @@ import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Long;
 import net.opentsdb.query.processor.expressions2.nodes.Metric;
 import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
-//import org.junit.Rule;
+import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 import org.junit.Test;
-//import org.junit.rules.ExpectedException;
 
 public class TestExpressionParser {
     private final Map<String, ExpressionNode> examples;
@@ -34,12 +34,9 @@ public class TestExpressionParser {
             put("-42", new NumericNegation(new Long(42)));
             put("-foo", new NumericNegation(new Metric("foo")));
             put("-(m1 + 12.5)", new NumericNegation(new Addition(new Metric("m1"), new Double(12.5))));
+            put("m1 + m2", new Addition(new Metric("m1"), new Metric("m2")));
         }};
     }
-    /*
-    @Rule
-    public ExpectedException exnRule = ExpectedException.none();
-    */
 
     @Test
     public void testParseByExample() {
@@ -50,12 +47,19 @@ public class TestExpressionParser {
         }
     }
 
-    /*
     @Test
-    public void testTypeError() {
-        exnRule.expect(ExpressionException.class);
-        exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
-        new ExpressionParser(new Number(3.14159265));
+    public void testUseCountTracking() {
+        final String expression = "m1 - 2 + m1";
+        final ExpressionParser parser = new ExpressionParser();
+        final ExpressionNode actual = parser.parse(expression);
+        final ExpressionNode expected = new Addition(new Subtraction(new Metric("m1"), new Long(2)), new Metric("m1"));
+        assertEquals(expected, actual);
+
+        final Addition add = (Addition) actual;
+        final Metric secondUse = (Metric) add.getRightOperand();
+        final Subtraction sub = (Subtraction) add.getLeftOperand();
+        final Metric firstUse = (Metric) sub.getLeftOperand();
+        assertTrue(firstUse == secondUse); // same object
+        assertEquals(2, firstUse.getUses()); // used twice
     }
-    */
 }

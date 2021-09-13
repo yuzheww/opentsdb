@@ -1,5 +1,7 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.opentsdb.query.processor.expressions2.ExpressionException;
 import net.opentsdb.query.processor.expressions2.ExpressionParser;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
@@ -14,9 +16,32 @@ import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 
 public class Evaluator implements ExpressionVisitor {
+    static final class TerminalState {
+        private final ExpressionValue value;
+        private int usesRemaining;
+
+        TerminalState(final ExpressionValue v, final int uses) {
+            value = v;
+            usesRemaining = uses;
+        }
+
+        ExpressionValue getValue() {
+            return value;
+        }
+
+        int getUsesRemaining() {
+            return usesRemaining;
+        }
+
+        public void use() {
+            --usesRemaining;
+        }
+    }
+
     private final ExpressionFactory factory;
     private final EvaluationContext context;
     private final ExpressionParser parser;
+    private final Map<String, TerminalState> terminals;
 
     public Evaluator(final ExpressionFactory factory,
             final EvaluationContext context) {
@@ -24,6 +49,11 @@ public class Evaluator implements ExpressionVisitor {
         this.context = context;
 
         parser = new ExpressionParser();
+        terminals = new HashMap<>();
+    }
+
+    void reset() {
+        terminals.clear();
     }
 
     /**
@@ -32,6 +62,8 @@ public class Evaluator implements ExpressionVisitor {
      * held by an object pool.
      */
     public ExpressionValue evaluate(final String expression) {
+        reset();
+
         final ExpressionNode parseTree = parser.parse(expression);
 
         parseTree.accept(this);
@@ -69,9 +101,32 @@ public class Evaluator implements ExpressionVisitor {
         context.push(context.pop().complement()); // bools are immutable
     }
 
+    ExpressionValue getTerminalValue(final Metric m) {
+        TerminalState s = terminals.get(m.getName());
+        if (null == s) {
+            ExpressionValue v = context.lookup(m.getName());
+            if (factory.getOptions().getAllowMetricReuse()) {
+                v = v.makeCopy();
+            }
+
+            s = new TerminalState(v, m.getUses());
+            terminals.put(m.getName(), s);
+        }
+
+        s.use();
+        if (s.getUsesRemaining() > 0) {
+            return s.getValue().makeCopy();
+        } else if (0 == s.getUsesRemaining()) {
+            return s.getValue();
+        } else {
+            throw new ExpressionException("tried to use terminal '" + m.getName() + "' too many times in Evaluator");
+        }
+    }
+
     @Override public void enterMetric(final Metric m) {}
     @Override public void leaveMetric(final Metric m) {
-        context.push(context.lookup(m.getName()));
+        final ExpressionValue v = getTerminalValue(m);
+        context.push(v);
     }
 
     @Override public void enterDouble(final Double d) {}

@@ -45,6 +45,7 @@ public class TestEvaluator extends FactoryBasedTest {
 
             // addition: long arrays
             put("nat + natSquared", factory.makeValueFrom(new long[] {0, 2, 6, 12, 20}));
+            put("nat + nat + nat", factory.makeValueFrom(new long[] {0, 3, 6, 9, 12}));
 
             // addition: arrays of mixed type
             put("natSquared + ieee754 + nat", factory.makeValueFrom(new double[] {1.25, 5d, 6.7, 20.1, 24.75}));
@@ -75,7 +76,9 @@ public class TestEvaluator extends FactoryBasedTest {
 
         for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
             try (final ExpressionValue result = evaluator.evaluate(example.getKey())) {
+                System.out.println("expr: " + example.getKey());
                 assertEquals(example.getValue(), result);
+                System.out.println("done");
             }
         }
     }

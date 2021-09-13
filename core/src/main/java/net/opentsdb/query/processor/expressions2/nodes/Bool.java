@@ -10,12 +10,23 @@ public class Bool extends Terminal {
         this.value = value;
     }
 
+    public static final Bool TRUE = new Bool(true);
+    public static final Bool FALSE = new Bool(false);
+
     public boolean getValue() {
         return value;
     }
 
-    public static final Bool TRUE = new Bool(true);
-    public static final Bool FALSE = new Bool(false);
+    @Override
+    public int getUses() {
+        // We act as if each Boolean value appears once in each expression, no
+        // matter how often it is actually used. This will eliminate all copies,
+        // which is safe because Boolean values should be immutable.
+        return 1;
+    }
+
+    @Override
+    public void recordUse() { /* noop */ }
 
     @Override
     public boolean equals(final Object other) {

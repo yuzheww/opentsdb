@@ -24,6 +24,7 @@ public class FactoryBasedTest {
         new EvaluationOptions.Builder().
             setInfectiousNaN(false).
             setForceFloatingPointDivision(true).
+            setAllowMetricReuse(true).
             build();
 
     public FactoryBasedTest() {
