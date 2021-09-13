@@ -46,7 +46,7 @@ public interface QueryNode<T extends QueryNodeConfig> {
    * Called by the {@link QueryPipelineContext} after the DAG has been setup
    * to initialize the node. This is when the node should parse out bits it 
    * needs from the query and config as well as setup any structures it needs.
-   * @span An optional tracing span.
+   * @param span An optional tracing span.
    * @return A deferred resolving to a null on success or an exception if
    * something went wrong during an async call.
    */

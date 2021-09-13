@@ -11,15 +11,16 @@ import net.opentsdb.data.TypedTimeSeriesIterator;
 import net.opentsdb.data.types.numeric.NumericArrayType;
 import net.opentsdb.query.QueryIteratorFactory;
 import net.opentsdb.query.processor.BaseQueryNodeFactory;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
-public class NumericIteratorFactory extends BaseQueryNodeFactory<ExpressionParseNode, ExpressionNode> {
-    public NumericIteratorFactory() {
+public class ExpressionIteratorFactory extends BaseQueryNodeFactory<ExpressionNode, ExpressionQueryNode> {
+    public ExpressionIteratorFactory() {
         super();
         registerIteratorFactory(NumericArrayType.TYPE,
             new NumericArrayIteratorFactory());
     }
 
-    class NumericArrayIteratorFactory implements QueryIteratorFactory<ExpressionNode, NumericArrayType> {
+    class NumericArrayIteratorFactory implements QueryIteratorFactory<ExpressionQueryNode, NumericArrayType> {
         @Override
         public TypedTimeSeriesIterator<T> newIterator(
                 final ExpressionNode node,
