@@ -3,8 +3,9 @@ package net.opentsdb.query.processor.expressions2.eval;
 import com.google.common.primitives.Longs;
 import java.util.Arrays;
 import net.opentsdb.pools.PooledObject;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
-public class LongArrayValue extends NumericValue<Long> {
+public class LongArrayValue extends NumericValue {
     private final PooledObject pooledObject;
     long[] underlying;
 
@@ -51,6 +52,11 @@ public class LongArrayValue extends NumericValue<Long> {
         if (null != pooledObject) {
             pooledObject.release();
         }
+    }
+
+    @Override
+    public ExpressionNode asNode() {
+        throw new UnsupportedOperationException("cannot transform LongArrayValue into ExpressionNode subclass");
     }
 
     @Override

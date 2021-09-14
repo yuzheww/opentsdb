@@ -2,6 +2,7 @@ package net.opentsdb.query.processor.expressions2.nodes;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import net.opentsdb.query.processor.expressions2.types.TypeLiteral;
@@ -18,5 +19,13 @@ public class TestBool {
     public void testGetType() {
         assertEquals(TypeLiteral.BOOLEAN, Bool.TRUE.getType());
         assertEquals(TypeLiteral.BOOLEAN, Bool.FALSE.getType());
+    }
+
+    @Test
+    public void testEquals() {
+        assertEquals(Bool.TRUE, Bool.TRUE);
+        assertEquals(Bool.FALSE, Bool.FALSE);
+        assertNotEquals(Bool.TRUE, Bool.FALSE);
+        assertNotEquals(Bool.FALSE, Bool.TRUE);
     }
 }

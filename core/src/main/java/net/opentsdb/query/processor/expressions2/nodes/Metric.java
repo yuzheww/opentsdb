@@ -6,7 +6,7 @@ public class Metric extends Terminal {
     private final String name;
 
     public Metric(final String name) {
-        super(TypeLiteral.NUMERIC); // metrics are placeholders for numbers
+        super(TypeLiteral.NUMERIC); // metrics are presently numeric
         this.name = name;
     }
 
@@ -15,21 +15,24 @@ public class Metric extends Terminal {
     }
 
     @Override
+    public String getCanonicalRepresentation() {
+        return name;
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;
         }
-
         if (other == null) {
             return false;
         }
-
-        if (this.getClass() == other.getClass()) {
-            final Metric that = (Metric) other;
-            return this.name.equals(that.name);
+        if (this.getClass() != other.getClass()) {
+            return false;
         }
 
-        return false;
+        final Metric that = (Metric) other;
+        return this.name.equals(that.name);
     }
 
     @Override

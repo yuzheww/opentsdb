@@ -77,8 +77,8 @@ public class ExpressionParser extends DefaultErrorStrategy
 
     @Override public void enterProg(final MetricExpression2Parser.ProgContext ctx) {}
     @Override public void exitProg(final MetricExpression2Parser.ProgContext ctx) {}
-    @Override public void enterAdd(final MetricExpression2Parser.AddContext ctx) {}
 
+    @Override public void enterAdd(final MetricExpression2Parser.AddContext ctx) {}
     @Override public void exitAdd(final MetricExpression2Parser.AddContext ctx) {
         final ExpressionNode rhs = pop();
         final ExpressionNode lhs = pop();
@@ -104,8 +104,8 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void exitCmp(final MetricExpression2Parser.CmpContext ctx) {}
     @Override public void enterPow(final MetricExpression2Parser.PowContext ctx) {}
     @Override public void exitPow(final MetricExpression2Parser.PowContext ctx) {}
-    @Override public void enterUnary(final MetricExpression2Parser.UnaryContext ctx) {}
 
+    @Override public void enterUnary(final MetricExpression2Parser.UnaryContext ctx) {}
     @Override public void exitUnary(final MetricExpression2Parser.UnaryContext ctx) {
         if (ctx.op.getType() == MetricExpression2Parser.NOT) {
             push(new LogicalNegation(pop()));
@@ -122,8 +122,8 @@ public class ExpressionParser extends DefaultErrorStrategy
     @Override public void exitTernary(final MetricExpression2Parser.TernaryContext ctx) {}
     @Override public void enterOperand(final MetricExpression2Parser.OperandContext ctx) {}
     @Override public void exitOperand(final MetricExpression2Parser.OperandContext ctx) {}
-    @Override public void enterNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {}
 
+    @Override public void enterNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {}
     @Override public void exitNumeric_literal(final MetricExpression2Parser.Numeric_literalContext ctx) {
         final String encoded = ctx.getText();
 
@@ -138,22 +138,25 @@ public class ExpressionParser extends DefaultErrorStrategy
         try {
             final double dval = java.lang.Double.parseDouble(encoded);
             push(new Double(dval));
+            return;
         } catch (final NumberFormatException e) {
             throw new ExpressionException("could not parse '" + encoded + "' as long or double: " + e.getMessage());
         }
     }
 
     @Override public void enterBoolean_literal(final MetricExpression2Parser.Boolean_literalContext ctx) {}
-
     @Override public void exitBoolean_literal(final MetricExpression2Parser.Boolean_literalContext ctx) {
-        final String encoded = ctx.getText().toLowerCase();
-        if (encoded.equals("true")) {
+        if (null != ctx.TRUE()) {
             push(Bool.TRUE);
-        } else if (encoded.equals("false")) {
-            push(Bool.FALSE);
-        } else {
-            throw new ExpressionException("parser bug: should not have received '" + encoded + "' in exitBoolean_literal()");
+            return;
         }
+
+        if (null != ctx.FALSE()) {
+            push(Bool.FALSE);
+            return;
+        }
+
+        throw new ExpressionException("parser bug: should not have received '" + ctx.getText() + "' in exitBoolean_literal()");
     }
 
     @Override public void enterMetric(final MetricExpression2Parser.MetricContext ctx) {}

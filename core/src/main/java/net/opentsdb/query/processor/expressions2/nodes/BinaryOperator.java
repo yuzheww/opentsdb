@@ -14,13 +14,11 @@ public abstract class BinaryOperator extends ExpressionOperator {
     public BinaryOperator(final String symbol, final ExpressionNode leftOperand, final ExpressionNode rightOperand) {
         super(symbol, new TupleType(leftOperand.getType(), rightOperand.getType()));
 
+        leftOperand.setParent(this);
+        rightOperand.setParent(this);
+
         lhs = leftOperand;
         rhs = rightOperand;
-    }
-
-    @Override
-    public int getArity() {
-        return 2;
     }
 
     public ExpressionNode getLeftOperand() {
@@ -43,6 +41,27 @@ public abstract class BinaryOperator extends ExpressionOperator {
             throw new ExpressionException("bad type for right operand in BinaryOperator");
         }
         this.rhs = rhs;
+    }
+
+    @Override
+    public void replaceChild(final ExpressionNode replaceThis,
+            final ExpressionNode withThis) {
+        if (lhs == replaceThis) {
+            setLeftOperand(withThis);
+            return;
+        }
+
+        if (rhs == replaceThis) {
+            setRightOperand(withThis);
+            return;
+        }
+
+        throw new ExpressionException("asked to replace child that does not exist in BinaryOperator");
+    }
+
+    @Override
+    public int getArity() {
+        return 2;
     }
 
     @Override

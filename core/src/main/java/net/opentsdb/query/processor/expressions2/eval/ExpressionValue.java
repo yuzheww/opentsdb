@@ -1,5 +1,7 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
+
 public abstract class ExpressionValue implements AutoCloseable {
     private final ExpressionFactory factory;
 
@@ -10,6 +12,8 @@ public abstract class ExpressionValue implements AutoCloseable {
     public ExpressionFactory getFactory() {
         return factory;
     }
+
+    public abstract ExpressionNode asNode();
 
     public abstract ExpressionValue makeCopy();
 

@@ -2,7 +2,7 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import net.opentsdb.query.processor.expressions2.ExpressionException;
 
-public abstract class NumericValue<T> extends ExpressionValue {
+public abstract class NumericValue extends ExpressionValue {
     public static final double EPSILON = 1e-14;
 
     public NumericValue(final ExpressionFactory factory) {

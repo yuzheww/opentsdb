@@ -1,10 +1,10 @@
 package net.opentsdb.query.processor.expressions2.nodes;
 
-import net.opentsdb.query.processor.expressions2.ExpressionException;
+import net.opentsdb.query.processor.expressions2.OperatorTypeError;
 import net.opentsdb.query.processor.expressions2.types.ExpressionType;
 import net.opentsdb.query.processor.expressions2.types.FunctionType;
 
-public abstract class ExpressionOperator extends ExpressionNode {
+public abstract class ExpressionOperator extends NonTerminal {
     private final String symbol;
 
     public ExpressionOperator(final String symbol, final ExpressionType domainType) {
@@ -15,13 +15,17 @@ public abstract class ExpressionOperator extends ExpressionNode {
         setType(findMatchingSignature(domainType).getRange());
     }
 
-    @Override
-    public boolean isTerminal() {
-        return false;
+    /**
+     * Get this operator's symbol.
+     * @return This operator's symbol.
+     */
+    public String getSymbol() {
+        return symbol;
     }
 
     /**
      * Return how many operands this operator requires.
+     * @return How many operands this operator requires.
      */
     public abstract int getArity();
 
@@ -29,11 +33,12 @@ public abstract class ExpressionOperator extends ExpressionNode {
      * Yield all valid type signatures for this operator. In each list of types,
      * the domain type should be unique because findMatchingSignature() will
      * select only the first matching type.
+     * @return All valid type signatures for this operator.
      */
     public abstract FunctionType[] getTypeSignatures();
 
     /**
-     * Find the first function signature satisfied by the given domainType.
+     * Find the first type signature whose domain is satisfied by domainType.
      * @param domainType
      * @return The first signature satisfied by domainType.
      */
@@ -44,11 +49,12 @@ public abstract class ExpressionOperator extends ExpressionNode {
             }
         }
 
-        throw new ExpressionException("could not match given domain type to any valid signature in ExpressionOperator");
+        throw new OperatorTypeError("type mismatch", getSymbol(), getTypeSignatures(), domainType);
     }
 
-    public String getSymbol() {
-        return symbol;
+    @Override
+    public boolean isTerminal() {
+        return false;
     }
 
     @Override

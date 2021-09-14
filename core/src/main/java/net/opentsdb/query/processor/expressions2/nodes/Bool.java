@@ -18,6 +18,11 @@ public class Bool extends Terminal {
     }
 
     @Override
+    public String getCanonicalRepresentation() {
+        return value ? "true" : "false";
+    }
+
+    @Override
     public int getUses() {
         // We act as if each Boolean value appears once in each expression, no
         // matter how often it is actually used. This will eliminate all copies,
@@ -33,17 +38,15 @@ public class Bool extends Terminal {
         if (this == other) {
             return true;
         }
-
         if (other == null) {
             return false;
         }
-
-        if (other instanceof Bool) {
-            final Bool that = (Bool) other;
-            return this.value == that.value;
+        if (this.getClass() != other.getClass()) {
+            return false;
         }
 
-        return false;
+        final Bool that = (Bool) other;
+        return this.value == that.value;
     }
 
     @Override

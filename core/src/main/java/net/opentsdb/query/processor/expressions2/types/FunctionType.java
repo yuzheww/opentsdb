@@ -33,4 +33,9 @@ public class FunctionType implements ExpressionType {
         return this.domain.equals(otherFn.domain) &&
             this.range.equals(otherFn.range);
     }
+
+    @Override
+    public String toString() {
+        return domain.toString() + " -> " + range.toString();
+    }
 }

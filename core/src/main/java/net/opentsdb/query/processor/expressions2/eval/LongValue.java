@@ -1,6 +1,9 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
-public class LongValue extends NumericValue<Long> {
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
+import net.opentsdb.query.processor.expressions2.nodes.Long;
+
+public class LongValue extends NumericValue {
     long underlying;
 
     public LongValue(final ExpressionFactory factory, final long value) {
@@ -14,6 +17,11 @@ public class LongValue extends NumericValue<Long> {
 
     @Override
     public void close() { }
+
+    @Override
+    public ExpressionNode asNode() {
+        return new Long(underlying);
+    }
 
     @Override
     public ExpressionValue makeCopy() {

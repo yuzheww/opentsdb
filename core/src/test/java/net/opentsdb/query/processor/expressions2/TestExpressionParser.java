@@ -26,6 +26,7 @@ public class TestExpressionParser {
             put("1 + 2", new Addition(new Long(1), new Long(2)));
             put("3.14159 + 2.71828", new Addition(new Double(3.14159), new Double(2.71828)));
             put("m1 + 0", new Addition(new Metric("m1"), new Long(0)));
+            put("m1 + 1 + 2", new Addition(new Addition(new Metric("m1"), new Long(1)), new Long(2)));
             put("25 + m3", new Addition(new Long(25), new Metric("m3")));
             put("1 + (2 + 3)", new Addition(new Long(1), new Addition(new Long(2), new Long(3))));
             put("TrUe", Bool.TRUE);

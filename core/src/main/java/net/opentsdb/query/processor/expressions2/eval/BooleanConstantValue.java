@@ -1,6 +1,8 @@
 package net.opentsdb.query.processor.expressions2.eval;
 
 import net.opentsdb.query.processor.expressions2.ExpressionException;
+import net.opentsdb.query.processor.expressions2.nodes.Bool;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
 public class BooleanConstantValue extends ExpressionValue {
     private final boolean underlying;
@@ -15,6 +17,11 @@ public class BooleanConstantValue extends ExpressionValue {
 
     @Override
     public void close() { }
+
+    @Override
+    public ExpressionNode asNode() {
+        return TRUE == this ? Bool.TRUE : Bool.FALSE;
+    }
 
     @Override
     public ExpressionValue makeCopy() {

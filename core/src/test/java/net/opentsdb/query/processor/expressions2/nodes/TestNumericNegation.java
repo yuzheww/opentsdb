@@ -33,7 +33,7 @@ public class TestNumericNegation {
     @Test
     public void testTypeErrorBool() {
         exnRule.expect(ExpressionException.class);
-        exnRule.expectMessage("could not match given domain type to any valid signature in ExpressionOperator");
+        exnRule.expectMessage("type mismatch");
         new NumericNegation(Bool.TRUE);
     }
 }

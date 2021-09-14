@@ -4,8 +4,9 @@ import com.google.common.math.DoubleMath;
 import com.google.common.primitives.Doubles;
 import java.util.Arrays;
 import net.opentsdb.pools.PooledObject;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
-public class DoubleArrayValue extends NumericValue<Double> {
+public class DoubleArrayValue extends NumericValue {
     private final PooledObject pooledObject;
     double[] underlying;
 
@@ -52,6 +53,11 @@ public class DoubleArrayValue extends NumericValue<Double> {
         if (null != pooledObject) {
             pooledObject.release();
         }
+    }
+
+    @Override
+    public ExpressionNode asNode() {
+        throw new UnsupportedOperationException("cannot transform DoubleArrayValue into ExpressionNode subclass");
     }
 
     @Override

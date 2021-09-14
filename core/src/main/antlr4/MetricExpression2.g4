@@ -83,6 +83,7 @@ WS : [ \t\r\n]+ -> skip ;
 prog: expression EOF;
 
 expression : operand                                         # atom
+           //| fn=ID '(' expression ')'                        # func
            | op=(SUB|NOT) expression                         # unary
            | expression op=POW expression                    # pow
            | expression op=(MUL|DIV|MOD) expression          # mul

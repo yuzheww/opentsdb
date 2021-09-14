@@ -34,6 +34,12 @@ public abstract class Terminal extends ExpressionNode {
         ++uses;
     }
 
+    /**
+     * Get the canonical, textual representation of this terminal.
+     * @return The canonical, textual representation of this terminal.
+     */
+    public abstract String getCanonicalRepresentation();
+
     @Override
     public boolean isTerminal() {
         return true;

@@ -1,6 +1,7 @@
 package net.opentsdb.query.processor.expressions2.types;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class TupleType implements ExpressionType {
     private final ExpressionType[] children;
@@ -23,5 +24,11 @@ public class TupleType implements ExpressionType {
 
         final TupleType otherTuple = (TupleType) other;
         return Arrays.equals(this.children, otherTuple.children);
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.stream(children).map(Object::toString).
+            collect(Collectors.joining(" * "));
     }
 }

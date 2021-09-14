@@ -32,7 +32,7 @@ public class TestEvaluator extends FactoryBasedTest {
             // addition: long array and single value
             put("nat + 1", factory.makeValueFrom(new long[] {1, 2, 3, 4, 5}));
             put("nat + 2.5", factory.makeValueFrom(new double[] {2.5, 3.5, 4.5, 5.5, 6.5}));
-            put("nat + 2.0", factory.makeValueFrom(new long [] {2, 3, 4, 5, 6}));
+            put("nat + 2.0", factory.makeValueFrom(new long[] {2, 3, 4, 5, 6}));
             put("1 + nat", factory.makeValueFrom(new long[] {1, 2, 3, 4, 5}));
             put("2.5 + nat", factory.makeValueFrom(new double[] {2.5, 3.5, 4.5, 5.5, 6.5}));
             put("2.0 + nat", factory.makeValueFrom(new long [] {2, 3, 4, 5, 6}));

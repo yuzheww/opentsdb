@@ -2,8 +2,10 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import com.google.common.math.DoubleMath;
 import net.opentsdb.pools.PooledObject;
+import net.opentsdb.query.processor.expressions2.nodes.Double;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
-public class DoubleValue extends NumericValue<Double> {
+public class DoubleValue extends NumericValue {
     double underlying;
 
     public DoubleValue(final ExpressionFactory factory, final double value) {
@@ -21,6 +23,11 @@ public class DoubleValue extends NumericValue<Double> {
 
     @Override
     public void close() { }
+
+    @Override
+    public ExpressionNode asNode() {
+        return new Double(underlying);
+    }
 
     @Override
     public ExpressionValue makeCopy() {

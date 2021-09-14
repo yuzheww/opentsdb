@@ -26,13 +26,14 @@ public class ExpressionQueryNode extends AbstractQueryNode<ExpressionNode> {
      * @param context The non-null context.
      * @param exprConf The non-null expression config.
      */
-    public BinaryExpressionNode(final QueryNodeFactory factory,
-                                final QueryPipelineContext context, 
-                                final ExpressionConfig exprConf) {
+    public ExpressionQueryNode(final QueryNodeFactory factory,
+                               final QueryPipelineContext context,
+                               final ExpressionConfig exprConf) {
         super(factory, context);
         if (null == exprConf) {
             throw new IllegalArgumentException("Expression config cannot be null.");
         }
+        this.expression_config = exprConf;
     }
 
     @Override
