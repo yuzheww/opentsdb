@@ -3,7 +3,6 @@ package net.opentsdb.query.processor.expressions2.eval;
 import java.util.HashMap;
 import java.util.Map;
 import net.opentsdb.query.processor.expressions2.ExpressionException;
-import net.opentsdb.query.processor.expressions2.ExpressionParser;
 import net.opentsdb.query.processor.expressions2.nodes.Addition;
 import net.opentsdb.query.processor.expressions2.nodes.Bool;
 import net.opentsdb.query.processor.expressions2.nodes.DefaultExpressionVisitor;
@@ -40,15 +39,18 @@ public class Evaluator extends DefaultExpressionVisitor {
 
     private final ExpressionFactory factory;
     private final EvaluationContext context;
-    private final ExpressionParser parser;
     private final Map<String, TerminalState> terminals;
 
+    /** 
+     * TODO 
+     * @param factory
+     * @param context
+     */
     public Evaluator(final ExpressionFactory factory,
             final EvaluationContext context) {
         this.factory = factory;
         this.context = context;
 
-        parser = new ExpressionParser();
         terminals = new HashMap<>();
     }
 
@@ -57,14 +59,12 @@ public class Evaluator extends DefaultExpressionVisitor {
     }
 
     /**
-     * Evaluate the given expression using the configured context.
+     * Evaluate the given parsed expression using the configured context.
      * @return An AutoCloseable object with backing storage that may still be
      * held by an object pool.
      */
-    public ExpressionValue evaluate(final String expression) {
+    public ExpressionValue evaluate(final ExpressionNode parseTree) {
         reset();
-
-        final ExpressionNode parseTree = parser.parse(expression);
 
         parseTree.accept(this);
 

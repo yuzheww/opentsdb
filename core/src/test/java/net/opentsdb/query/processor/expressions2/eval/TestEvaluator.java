@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.opentsdb.query.processor.expressions2.ExpressionParser;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 import org.junit.Test;
 
 public class TestEvaluator extends FactoryBasedTest {
@@ -16,6 +18,8 @@ public class TestEvaluator extends FactoryBasedTest {
             build();
 
         final Evaluator evaluator = new Evaluator(factory, context);
+
+        final ExpressionParser parser = new ExpressionParser();
 
         final Map<String, ExpressionValue> examples = new HashMap<String, ExpressionValue>() {{
             put("true", BooleanConstantValue.TRUE);
@@ -75,7 +79,8 @@ public class TestEvaluator extends FactoryBasedTest {
         }};
 
         for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
-            try (final ExpressionValue result = evaluator.evaluate(example.getKey())) {
+            final ExpressionNode parseTree = parser.parse(example.getKey());
+            try (final ExpressionValue result = evaluator.evaluate(parseTree)) {
                 System.out.println("expr: " + example.getKey());
                 assertEquals(example.getValue(), result);
                 System.out.println("done");
