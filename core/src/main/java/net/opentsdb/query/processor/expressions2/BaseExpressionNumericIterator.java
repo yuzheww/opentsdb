@@ -1,6 +1,9 @@
 package net.opentsdb.query.processor.expressions2;
 
+import com.google.common.reflect.TypeToken;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import net.opentsdb.core.TSDB;
 import net.opentsdb.data.MillisecondTimeStamp;
 import net.opentsdb.data.TimeSeries;
@@ -14,12 +17,54 @@ import net.opentsdb.pools.LongArrayPool;
 import net.opentsdb.query.QueryIterator;
 import net.opentsdb.query.QueryNode;
 import net.opentsdb.query.processor.expressions.ExpressionConfig;
+import net.opentsdb.query.processor.expressions2.eval.EvaluationContext;
+import net.opentsdb.query.processor.expressions2.eval.EvaluationOptions;
+import net.opentsdb.query.processor.expressions2.eval.ExpressionFactory;
+import net.opentsdb.query.processor.expressions2.eval.Simplifier;
+import net.opentsdb.query.processor.expressions2.nodes.DefaultExpressionVisitor;
+import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
+import net.opentsdb.query.processor.expressions2.nodes.Metric;
 
 public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType>
         implements QueryIterator, TimeSeriesValue<T> {
-    protected final TimeStamp nextTimestamp;
+    static final class Metadata {
+        Set<String> variablesUsed;
 
-    protected final Evaluator evaluator;
+        public Metadata() {
+            variablesUsed = new HashSet<>();
+        }
+    }
+
+    static final class MetadataCollector extends DefaultExpressionVisitor {
+        final Metadata meta;
+
+        MetadataCollector(final Metadata meta) {
+            this.meta = meta;
+        }
+
+        @Override
+        public void leaveMetric(final Metric m) {
+            meta.variablesUsed.add(m.getName());
+        }
+    }
+
+    /** TODO */
+    protected TimeStamp nextTimestamp;
+
+    /** TODO */
+    protected boolean hasMoreValues;
+
+    /** This factory enables any evaluator to create new objects. */
+    protected final ExpressionFactory factory;
+
+    /** This builder collects data as it arrives from other nodes. */
+    protected final EvaluationContext.Builder contextBuilder;
+
+    /** This metadata object describes the expression. */
+    protected final Metadata metadata;
+
+    /** This graph represents the expression. */
+    protected final ExpressionNode expression;
 
     /**
      * C-tor.
@@ -30,8 +75,9 @@ public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType
     public BaseExpressionNumericIterator(final TSDB tsdb,
             final ExpressionConfig config,
             final Map<String, TimeSeries> sources) {
-        // Initialze state objects.
+        // Initialize state objects.
         nextTimestamp = new MillisecondTimeStamp(0);
+        hasMoreValues = false;
 
         // Build options object based on expression configuration.
         final EvaluationOptions options = new EvaluationOptions.Builder().
@@ -41,27 +87,33 @@ public abstract class BaseExpressionNumericIterator<T extends TimeSeriesDataType
             build();
 
         // Fetch the pools we need from TSDB.
-        final ArrayObjectPool longPool = tsdb.getRegistry().getObjectPool(
-            LongArrayPool.TYPE);
-        final ArrayObjectPool doublePool = tsdb.getRegistry().getObjectPool(
-            DoubleArrayPool.TYPE);
+        final ArrayObjectPool longPool = (ArrayObjectPool) tsdb.getRegistry().
+            getObjectPool(LongArrayPool.TYPE);
+        final ArrayObjectPool doublePool = (ArrayObjectPool) tsdb.getRegistry().
+            getObjectPool(DoubleArrayPool.TYPE);
 
         // With the above, we can build our factory.
-        final ExpressionFactory factory = new ExpressionFactory(options,
-            longPool, doublePool);
+        factory = new ExpressionFactory(options, longPool, doublePool);
 
-        // Build context object based on the sources.
-        final EvaluationContext context = new EvaluationContext.Builder().
-            // TODO: define metrics from sources
-            build();
+        // We will collect data here as it comes in.
+        contextBuilder = new EvaluationContext.Builder();
 
-        // Finally, we can construct the evaluator itself.
-        evaluator = new Evaluator(factory, context);
+        // Analyze the expression to be evaluated.
+        final String rawExpression = config.getExpression();
+        final ExpressionParser parser = new ExpressionParser();
+        ExpressionNode parseTree = parser.parse(rawExpression);
+        final Simplifier simplifier = new Simplifier();
+        expression = simplifier.simplify(parseTree);
+
+        // We can now collect metadata from the expression.
+        metadata = new Metadata();
+        final MetadataCollector collector = new MetadataCollector(metadata);
+        expression.accept(collector);
     }
 
     @Override
     public boolean hasNext() {
-        return false; // TODO
+        return hasMoreValues;
     }
 
     @Override
