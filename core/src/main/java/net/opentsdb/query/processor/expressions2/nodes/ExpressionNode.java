@@ -2,6 +2,9 @@ package net.opentsdb.query.processor.expressions2.nodes;
 
 import net.opentsdb.query.processor.expressions2.types.ExpressionType;
 
+/**
+ * ExpressionNode is the root class of the node hierarchy.
+ */
 public abstract class ExpressionNode {
     private ExpressionType type;
     private NonTerminal parent;

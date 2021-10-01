@@ -2,6 +2,9 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
 
+/**
+ * ExpressionValue is the root class of the value hierarchy.
+ */
 public abstract class ExpressionValue implements AutoCloseable {
     private final ExpressionFactory factory;
 

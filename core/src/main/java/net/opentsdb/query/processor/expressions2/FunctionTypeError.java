@@ -3,6 +3,9 @@ package net.opentsdb.query.processor.expressions2;
 import net.opentsdb.query.processor.expressions2.types.ExpressionType;
 import net.opentsdb.query.processor.expressions2.types.FunctionType;
 
+/**
+ * TODO
+ */
 public class FunctionTypeError extends ExpressionException {
     private final String message;
     private final String name;
@@ -11,10 +14,10 @@ public class FunctionTypeError extends ExpressionException {
 
     /**
      * C-tor.
-     * @param message
-     * @param name
-     * @param signatures
-     * @param actualType
+     * @param message Human-readable description.
+     * @param name Of this function.
+     * @param signatures That are valid for this function.
+     * @param actualType That the actual type of the user arguments given.
      */
     public FunctionTypeError(final String message, final String name,
             final FunctionType[] signatures, final ExpressionType actualType) {

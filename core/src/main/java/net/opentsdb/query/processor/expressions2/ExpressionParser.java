@@ -25,6 +25,10 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+/**
+ * ExpressionParser transforms the textual representation of an expression into
+ * a parse tree.
+ */
 public class ExpressionParser extends DefaultErrorStrategy
         implements MetricExpression2Listener {
     private final Deque<ExpressionNode> stack;
@@ -40,6 +44,11 @@ public class ExpressionParser extends DefaultErrorStrategy
         terminals.clear();
     }
 
+    /**
+     * Transform a textual expression into a parse tree.
+     * @param expression Textual representation of an expression.
+     * @return An equivalent parse tree.
+     */
     public ExpressionNode parse(final String expression) {
         reset();
 
