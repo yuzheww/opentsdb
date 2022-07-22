@@ -89,6 +89,106 @@ public class BooleanConstantValue extends ExpressionValue {
     }
 
     @Override
+    public ExpressionValue multiply(ExpressionValue value) {
+        throw new ExpressionException("illegal call of multiply() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue multiply(LongValue value) {
+        throw new ExpressionException("illegal call of multiply() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue multiply(DoubleValue value) {
+        throw new ExpressionException("illegal call of multiply() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue multiply(LongArrayValue values) {
+        throw new ExpressionException("illegal call of multiply() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue multiply(DoubleArrayValue values) {
+        throw new ExpressionException("illegal call of multiply() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue divide(ExpressionValue value) {
+        throw new ExpressionException("illegal call of divide() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue divide(LongValue value) {
+        throw new ExpressionException("illegal call of divide() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue divide(DoubleValue value) {
+        throw new ExpressionException("illegal call of divide() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue divide(LongArrayValue values) {
+        throw new ExpressionException("illegal call of divide() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue divide(DoubleArrayValue values) {
+        throw new ExpressionException("illegal call of divide() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue mod(ExpressionValue value) {
+        throw new ExpressionException("illegal call of modulo() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue mod(LongValue value) {
+        throw new ExpressionException("illegal call of modulo() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue mod(DoubleValue value) {
+        throw new ExpressionException("illegal call of modulo() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue mod(LongArrayValue values) {
+        throw new ExpressionException("illegal call of modulo() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue mod(DoubleArrayValue values) {
+        throw new ExpressionException("illegal call of modulo() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue power(ExpressionValue value) {
+        throw new ExpressionException("illegal call of power() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue power(LongValue value) {
+        throw new ExpressionException("illegal call of power() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue power(DoubleValue value) {
+        throw new ExpressionException("illegal call of power() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue power(LongArrayValue values) {
+        throw new ExpressionException("illegal call of power() on BooleanConstantValue");
+    }
+
+    @Override
+    public ExpressionValue power(DoubleArrayValue values) {
+        throw new ExpressionException("illegal call of power() on BooleanConstantValue");
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;

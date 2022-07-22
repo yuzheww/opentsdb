@@ -3,16 +3,9 @@ package net.opentsdb.query.processor.expressions2.eval;
 import java.util.HashMap;
 import java.util.Map;
 import net.opentsdb.query.processor.expressions2.ExpressionException;
-import net.opentsdb.query.processor.expressions2.nodes.Addition;
-import net.opentsdb.query.processor.expressions2.nodes.Bool;
-import net.opentsdb.query.processor.expressions2.nodes.DefaultExpressionVisitor;
+import net.opentsdb.query.processor.expressions2.nodes.*;
 import net.opentsdb.query.processor.expressions2.nodes.Double;
-import net.opentsdb.query.processor.expressions2.nodes.ExpressionNode;
-import net.opentsdb.query.processor.expressions2.nodes.LogicalNegation;
 import net.opentsdb.query.processor.expressions2.nodes.Long;
-import net.opentsdb.query.processor.expressions2.nodes.Metric;
-import net.opentsdb.query.processor.expressions2.nodes.NumericNegation;
-import net.opentsdb.query.processor.expressions2.nodes.Subtraction;
 
 public class Evaluator extends DefaultExpressionVisitor {
     static final class TerminalState {
@@ -87,6 +80,34 @@ public class Evaluator extends DefaultExpressionVisitor {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
         context.push(lhs.subtract(rhs));
+    }
+
+    @Override
+    public void leaveMultiplication(Multiplication s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.multiply(rhs));
+    }
+
+    @Override
+    public void leaveDivision(Division s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.divide(rhs));
+    }
+
+    @Override
+    public void leaveModulo(Modulo s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.mod(rhs));
+    }
+
+    @Override
+    public void leavePower(Power s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.power(rhs));
     }
 
     @Override

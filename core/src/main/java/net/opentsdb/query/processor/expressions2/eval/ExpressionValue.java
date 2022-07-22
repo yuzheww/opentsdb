@@ -34,4 +34,28 @@ public abstract class ExpressionValue implements AutoCloseable {
     public abstract ExpressionValue subtract(DoubleValue value);
     public abstract ExpressionValue subtract(LongArrayValue values);
     public abstract ExpressionValue subtract(DoubleArrayValue values);
+
+    public abstract ExpressionValue multiply(ExpressionValue value);
+    public abstract ExpressionValue multiply(LongValue value);
+    public abstract ExpressionValue multiply(DoubleValue value);
+    public abstract ExpressionValue multiply(LongArrayValue values);
+    public abstract ExpressionValue multiply(DoubleArrayValue values);
+
+    public abstract ExpressionValue divide(ExpressionValue value);
+    public abstract ExpressionValue divide(LongValue value);
+    public abstract ExpressionValue divide(DoubleValue value);
+    public abstract ExpressionValue divide(LongArrayValue values);
+    public abstract ExpressionValue divide(DoubleArrayValue values);
+
+    public abstract ExpressionValue mod(ExpressionValue value);
+    public abstract ExpressionValue mod(LongValue value);
+    public abstract ExpressionValue mod(DoubleValue value);
+    public abstract ExpressionValue mod(LongArrayValue values);
+    public abstract ExpressionValue mod(DoubleArrayValue values);
+
+    public abstract ExpressionValue power(ExpressionValue value);
+    public abstract ExpressionValue power(LongValue value);
+    public abstract ExpressionValue power(DoubleValue value);
+    public abstract ExpressionValue power(LongArrayValue values);
+    public abstract ExpressionValue power(DoubleArrayValue values);
 }
