@@ -258,6 +258,28 @@ public class LongValue extends NumericValue {
     }
 
     @Override
+    public int compare(DoubleValue value) {
+        if (this.underlying == value.underlying) return 0;
+        return this.underlying < value.underlying ? -1 : 1;
+    }
+
+    @Override
+    public int compare(LongValue value) {
+        if (this.underlying == value.underlying) return 0;
+        return this.underlying < value.underlying ? -1 : 1;
+    }
+
+    @Override
+    public int compare(BooleanConstantValue value) {
+        throw new ExpressionException("illegal call of compare() on LongValue");
+    }
+
+    @Override
+    public int compare(ExpressionValue value) {
+        return -value.compare(this);
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;

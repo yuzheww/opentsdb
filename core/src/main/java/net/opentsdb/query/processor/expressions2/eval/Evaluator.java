@@ -2,6 +2,7 @@ package net.opentsdb.query.processor.expressions2.eval;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import net.opentsdb.query.processor.expressions2.ExpressionException;
 import net.opentsdb.query.processor.expressions2.nodes.*;
 import net.opentsdb.query.processor.expressions2.nodes.Double;
@@ -34,13 +35,14 @@ public class Evaluator extends DefaultExpressionVisitor {
     private final EvaluationContext context;
     private final Map<String, TerminalState> terminals;
 
-    /** 
-     * TODO 
+    /**
+     * TODO
+     *
      * @param factory
      * @param context
      */
     public Evaluator(final ExpressionFactory factory,
-            final EvaluationContext context) {
+                     final EvaluationContext context) {
         this.factory = factory;
         this.context = context;
 
@@ -53,6 +55,7 @@ public class Evaluator extends DefaultExpressionVisitor {
 
     /**
      * Evaluate the given parsed expression using the configured context.
+     *
      * @return An AutoCloseable object with backing storage that may still be
      * held by an object pool.
      */
@@ -111,10 +114,87 @@ public class Evaluator extends DefaultExpressionVisitor {
     }
 
     @Override
+    public void leaveEqual(Equal s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) == 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveGte(Gte s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) >= 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveGt(Gt s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) > 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveLte(Lte s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) <= 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveLt(Lt s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) < 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveNotEq(NotEq s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        context.push(lhs.compare(rhs) != 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveTernary(TernaryOperator s) {
+        final ExpressionValue falseCase = context.pop();
+        final ExpressionValue trueCase = context.pop();
+        final ExpressionValue condition = context.pop();
+
+        if (condition.equals(BooleanConstantValue.TRUE)) {
+            context.push(trueCase);
+        } else {
+            context.push(falseCase);
+        }
+    }
+
+    @Override
     public void leaveBool(final Bool b) {
         context.push(Bool.TRUE == b ?
-            BooleanConstantValue.TRUE :
-            BooleanConstantValue.FALSE);
+                BooleanConstantValue.TRUE :
+                BooleanConstantValue.FALSE);
+    }
+
+    @Override
+    public void leaveAnd(final And s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        if (lhs.equals(BooleanConstantValue.TRUE) && rhs.equals(BooleanConstantValue.TRUE)) {
+            context.push(BooleanConstantValue.TRUE);
+        } else {
+            context.push(BooleanConstantValue.FALSE);
+        }
+    }
+
+    @Override
+    public void leaveOr(final Or s) {
+        final ExpressionValue rhs = context.pop();
+        final ExpressionValue lhs = context.pop();
+        if (lhs.equals(BooleanConstantValue.TRUE) || rhs.equals(BooleanConstantValue.TRUE)) {
+            context.push(BooleanConstantValue.TRUE);
+        } else {
+            context.push(BooleanConstantValue.FALSE);
+        }
     }
 
     @Override

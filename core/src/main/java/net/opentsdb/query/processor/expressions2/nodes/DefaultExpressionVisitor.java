@@ -130,4 +130,20 @@ public class DefaultExpressionVisitor implements ExpressionVisitor {
     @Override
     public void leaveNumericNegation(final NumericNegation n) {
     }
+
+    @Override
+    public void enterAnd(final And l) {
+    }
+
+    @Override
+    public void leaveAnd(final And l) {
+    }
+
+    @Override
+    public void enterOr(final Or l) {
+    }
+
+    @Override
+    public void leaveOr(final Or l) {
+    }
 }

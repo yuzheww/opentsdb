@@ -351,6 +351,26 @@ public class DoubleArrayValue extends NumericValue {
         return this;
     }
 
+    @Override
+    public int compare(DoubleValue value) {
+        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    }
+
+    @Override
+    public int compare(LongValue value) {
+        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    }
+
+    @Override
+    public int compare(BooleanConstantValue value) {
+        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    }
+
+    @Override
+    public int compare(ExpressionValue value) {
+        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    }
+
 
     @Override
     public boolean equals(final Object other) {

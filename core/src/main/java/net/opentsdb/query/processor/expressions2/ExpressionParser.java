@@ -98,7 +98,11 @@ public class ExpressionParser extends DefaultErrorStrategy
     }
 
     @Override public void enterOr(final MetricExpression2Parser.OrContext ctx) {}
-    @Override public void exitOr(final MetricExpression2Parser.OrContext ctx) {}
+    @Override public void exitOr(final MetricExpression2Parser.OrContext ctx) {
+        final ExpressionNode rhs = pop();
+        final ExpressionNode lhs = pop();
+        push(new Or(lhs, rhs));
+    }
     @Override public void enterMul(final MetricExpression2Parser.MulContext ctx) {}
     @Override public void exitMul(final MetricExpression2Parser.MulContext ctx) {
         final ExpressionNode rhs = pop();
@@ -119,7 +123,11 @@ public class ExpressionParser extends DefaultErrorStrategy
         }
     }
     @Override public void enterAnd(final MetricExpression2Parser.AndContext ctx) {}
-    @Override public void exitAnd(final MetricExpression2Parser.AndContext ctx) {}
+    @Override public void exitAnd(final MetricExpression2Parser.AndContext ctx) {
+        final ExpressionNode rhs = pop();
+        final ExpressionNode lhs = pop();
+        push(new And(lhs, rhs));
+    }
     @Override public void enterCmp(final MetricExpression2Parser.CmpContext ctx) {}
     @Override public void exitCmp(final MetricExpression2Parser.CmpContext ctx) {
         final ExpressionNode rhs = pop();

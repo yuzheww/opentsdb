@@ -269,6 +269,28 @@ public class DoubleValue extends NumericValue {
     }
 
     @Override
+    public int compare(DoubleValue value) {
+        if (this.underlying == value.underlying) return 0;
+        return this.underlying < value.underlying ? -1 : 1;
+    }
+
+    @Override
+    public int compare(LongValue value) {
+        if (this.underlying == value.underlying) return 0;
+        return this.underlying < value.underlying ? -1 : 1;
+    }
+
+    @Override
+    public int compare(BooleanConstantValue value) {
+        throw new ExpressionException("illegal call of compare() on DoubleValue");
+    }
+
+    @Override
+    public int compare(ExpressionValue value) {
+        return -value.compare(this);
+    }
+
+    @Override
     public ExpressionValue power(DoubleArrayValue values) {
         for (int i = 0; i < values.underlying.length; ++i) {
             values.underlying[i] = Math.pow(this.underlying, values.underlying[i]);

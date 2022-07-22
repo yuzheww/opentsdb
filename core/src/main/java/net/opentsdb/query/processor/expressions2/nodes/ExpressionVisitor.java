@@ -57,4 +57,10 @@ public interface ExpressionVisitor {
 
     void enterNumericNegation(NumericNegation n);
     void leaveNumericNegation(NumericNegation n);
+
+    void enterAnd(And n);
+    void leaveAnd(And n);
+
+    void enterOr(Or n);
+    void leaveOr(Or n);
 }

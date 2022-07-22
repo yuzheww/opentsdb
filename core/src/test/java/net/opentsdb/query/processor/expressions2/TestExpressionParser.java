@@ -60,11 +60,8 @@ public class TestExpressionParser {
 
 
     @Test
-    public void testParseByLogicalExpressions() {
+    public void testParseComparisonExpressions() {
         Map<String, ExpressionNode> logicalExamples = new HashMap<String, ExpressionNode>() {{
-            put("0", new Long(0));
-            put("2.5", new Double(2.5));
-            put("1 + 2", new Addition(new Long(1), new Long(2)));
             put("TrUe", Bool.TRUE);
             put("FaLsE", Bool.FALSE);
             put("!true", new LogicalNegation(Bool.TRUE));
@@ -81,7 +78,23 @@ public class TestExpressionParser {
             put("(1 == 1 ? 2 : 3) + (1 == 1 ? 2 : 3)", new Addition(
                     new TernaryOperator(new Equal(new Long(1), new Long(1)), new Long(2), new Long(3)),
                     new TernaryOperator(new Equal(new Long(1), new Long(1)), new Long(2), new Long(3))));
+        }};
 
+        for (final Map.Entry<String, ExpressionNode> example : logicalExamples.entrySet()) {
+            final ExpressionParser parser = new ExpressionParser();
+            final ExpressionNode actual = parser.parse(example.getKey());
+            assertEquals(example.getValue(), actual);
+        }
+    }
+
+    @Test
+    public void testParseLogicalExpressions() {
+        Map<String, ExpressionNode> logicalExamples = new HashMap<String, ExpressionNode>() {{
+            put("TrUe && false", new And(Bool.TRUE, Bool.FALSE));
+            put("falsE || true", new Or(Bool.FALSE, Bool.TRUE));
+            put("!true && false", new And(new LogicalNegation(Bool.TRUE),Bool.FALSE));
+            put("!true && false || true", new Or(new And(new LogicalNegation(Bool.TRUE),Bool.FALSE), Bool.TRUE));
+            put("(1>2) || 2 <3", new Or(new Gt(new Long(1), new Long(2)), new Lt(new Long(2), new Long(3))));
         }};
 
         for (final Map.Entry<String, ExpressionNode> example : logicalExamples.entrySet()) {

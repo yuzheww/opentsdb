@@ -189,6 +189,26 @@ public class BooleanConstantValue extends ExpressionValue {
     }
 
     @Override
+    public int compare(DoubleValue value) {
+        throw new ExpressionException("illegal call of compare() on BooleanConstantValue");
+    }
+
+    @Override
+    public int compare(LongValue value) {
+        throw new ExpressionException("illegal call of compare() on BooleanConstantValue");
+    }
+
+    @Override
+    public int compare(BooleanConstantValue value) {
+        return this.equals(value) ? 0 : -1;
+    }
+
+    @Override
+    public int compare(ExpressionValue value) {
+        throw new ExpressionException("illegal call of compare() on BooleanConstantValue");
+    }
+
+    @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;

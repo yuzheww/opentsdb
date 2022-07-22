@@ -176,4 +176,65 @@ public class TestEvaluator extends FactoryBasedTest {
             }
         }
     }
+
+    @Test
+    public void testComparison() throws Exception {
+        // nat:         {0, 1, 2, 3, 4}
+        // natSquared:  {0, 1, 4, 9, 16}
+        // ieee754:     {1.25, 3d, 0.7, 8.1, 4.75}
+
+        final Map<String, ExpressionValue> examples = new HashMap<String, ExpressionValue>() {{
+            put("1 < 2", BooleanConstantValue.TRUE);
+            put("1 <= 1", BooleanConstantValue.TRUE);
+            put("1 <= 0", BooleanConstantValue.FALSE);
+            put("1 <= 0.9", BooleanConstantValue.FALSE);
+            put("1 == 1.0", BooleanConstantValue.TRUE);
+            put("1 == 1.0 && 2 > 1", BooleanConstantValue.TRUE);
+            put("1 >= 2 && 2 > 1", BooleanConstantValue.FALSE);
+            put("1 >= 2 || 2 > 1", BooleanConstantValue.TRUE);
+            put("1 != 1", BooleanConstantValue.FALSE);
+            put("1 == 1", BooleanConstantValue.TRUE);
+        }};
+
+        for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
+            final ExpressionNode parseTree = parser.parse(example.getKey());
+            try (final ExpressionValue result = evaluator.evaluate(parseTree)) {
+                System.out.println("expr: " + example.getKey());
+                assertEquals(example.getValue(), result);
+                System.out.println("done");
+            }
+        }
+    }
+
+    @Test
+    public void testTernary() throws Exception {
+        // nat:         {0, 1, 2, 3, 4}
+        // natSquared:  {0, 1, 4, 9, 16}
+        // ieee754:     {1.25, 3d, 0.7, 8.1, 4.75}
+
+        final Map<String, ExpressionValue> examples = new HashMap<String, ExpressionValue>() {{
+            put("1 < 2 ? 1 : 2", factory.makeValueFrom(1L));
+            put("1 > 2 ? 1 : 2", factory.makeValueFrom(2L));
+            put("1 > 2 || 2 < 3 ? 1 : 2", factory.makeValueFrom(1L));
+            put("1 > 2 && 2 < 3 ? 1 : 2", factory.makeValueFrom(2L));
+            put("((1 > 2) && (2 < 3)) ? 1 : 2", factory.makeValueFrom(2L));
+            put("(((1 > 2) && (2 < 3)) ? 1 : 2)", factory.makeValueFrom(2L));
+            put("(((1 > 2) && (2 < 3)) ? nat + 1 : nat + 2)", factory.makeValueFrom(new long[]{2, 3, 4, 5, 6}));
+            put("(((1 > 2) && (2 < 3)) ? (nat + 1) : (nat + 2))", factory.makeValueFrom(new long[]{2, 3, 4, 5, 6}));
+            put("(2.28 < 5.30 ? (nat + 1) : (nat + 2))", factory.makeValueFrom(new long[]{1, 2, 3, 4, 5}));
+            put("(2.28 < 5.30 ? ieee754 * 2 : (nat + 2))", factory.makeValueFrom(new double[]{2.5, 6d, 1.4, 16.2, 9.5}));
+            put("truE ? ieee754 * 2 : (nat + 2)", factory.makeValueFrom(new double[]{2.5, 6d, 1.4, 16.2, 9.5}));
+            put("1 < 2 ? 2<3?2+3:4+5 : 2", factory.makeValueFrom(5L));
+            put("1 >= 2 ? (2<3?2+3:4+5) : (2>3?100:200.2)", factory.makeValueFrom(200.2));
+        }};
+
+        for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
+            final ExpressionNode parseTree = parser.parse(example.getKey());
+            try (final ExpressionValue result = evaluator.evaluate(parseTree)) {
+                System.out.println("expr: " + example.getKey());
+                assertEquals(example.getValue(), result);
+                System.out.println("done");
+            }
+        }
+    }
 }
