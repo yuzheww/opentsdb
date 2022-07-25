@@ -117,42 +117,42 @@ public class Evaluator extends DefaultExpressionVisitor {
     public void leaveEqual(Equal s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) == 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isEqual(rhs));
     }
 
     @Override
     public void leaveGte(Gte s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) >= 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isGte(rhs));
     }
 
     @Override
     public void leaveGt(Gt s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) > 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isGt(rhs));
     }
 
     @Override
     public void leaveLte(Lte s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) <= 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isLte(rhs));
     }
 
     @Override
     public void leaveLt(Lt s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) < 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isLt(rhs));
     }
 
     @Override
     public void leaveNotEq(NotEq s) {
         final ExpressionValue rhs = context.pop();
         final ExpressionValue lhs = context.pop();
-        context.push(lhs.compare(rhs) != 0 ? BooleanConstantValue.TRUE : BooleanConstantValue.FALSE);
+        context.push(lhs.isEqual(rhs).complement());
     }
 
     @Override

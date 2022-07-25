@@ -352,23 +352,273 @@ public class DoubleArrayValue extends NumericValue {
     }
 
     @Override
-    public int compare(DoubleValue value) {
-        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    public ExpressionValue isEqual(ExpressionValue value) {
+        return value.isEqual(this);
     }
 
     @Override
-    public int compare(LongValue value) {
-        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    public ExpressionValue isEqual(DoubleValue value){
+        for (double num: this.underlying) {
+            if (num != value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
     }
 
     @Override
-    public int compare(BooleanConstantValue value) {
-        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    public ExpressionValue isEqual(LongValue value) {
+        for (double num: this.underlying) {
+            if (num != value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
     }
 
     @Override
-    public int compare(ExpressionValue value) {
-        throw new ExpressionException("illegal call of compare() on DoubleArrayValue");
+    public ExpressionValue isEqual(DoubleArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] != values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isEqual(LongArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] != values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isEqual(BooleanConstantValue value){
+        throw new ExpressionException("illegal call of isEqual() on DoubleArrayValue");
+    }
+
+    @Override
+    public ExpressionValue isGt(ExpressionValue value) {
+        if (value instanceof LongValue) {
+            return this.isGt((LongValue) value);
+        } else if (value instanceof LongArrayValue) {
+            return this.isGt((LongArrayValue) value);
+        } else if (value instanceof DoubleValue) {
+            return this.isGt((DoubleValue) value);
+        } else if (value instanceof DoubleArrayValue) {
+            return this.isGt((DoubleArrayValue) value);
+        }
+
+        throw new ExpressionException("unsupported expression operation: DoubleArrayValue.isGt(unknown ExpressionValue)");
+    }
+
+    @Override
+    public ExpressionValue isGt(DoubleValue value){
+        for (double num: this.underlying) {
+            if (num <= value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGt(LongValue value) {
+        for (double num: this.underlying) {
+            if (num <= value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGt(DoubleArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] <= values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGt(LongArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] <= values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGte(ExpressionValue value) {
+        if (value instanceof LongValue) {
+            return this.isGte((LongValue) value);
+        } else if (value instanceof LongArrayValue) {
+            return this.isGte((LongArrayValue) value);
+        } else if (value instanceof DoubleValue) {
+            return this.isGte((DoubleValue) value);
+        } else if (value instanceof DoubleArrayValue) {
+            return this.isGte((DoubleArrayValue) value);
+        }
+
+        throw new ExpressionException("unsupported expression operation: DoubleArrayValue.isGte(unknown ExpressionValue)");
+    }
+
+    @Override
+    public ExpressionValue isGte(DoubleValue value){
+        for (double num: this.underlying) {
+            if (num < value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGte(LongValue value) {
+        for (double num: this.underlying) {
+            if (num < value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGte(DoubleArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] < values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isGte(LongArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] < values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLt(ExpressionValue value) {
+        if (value instanceof LongValue) {
+            return this.isLt((LongValue) value);
+        } else if (value instanceof LongArrayValue) {
+            return this.isLt((LongArrayValue) value);
+        } else if (value instanceof DoubleValue) {
+            return this.isLt((DoubleValue) value);
+        } else if (value instanceof DoubleArrayValue) {
+            return this.isLt((DoubleArrayValue) value);
+        }
+
+        throw new ExpressionException("unsupported expression operation: DoubleArrayValue.isLt(unknown ExpressionValue)");
+    }
+
+    @Override
+    public ExpressionValue isLt(DoubleValue value){
+        for (double num: this.underlying) {
+            if (num >= value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLt(LongValue value) {
+        for (double num: this.underlying) {
+            if (num >= value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLt(DoubleArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] >= values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLt(LongArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] >= values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLte(ExpressionValue value) {
+        if (value instanceof LongValue) {
+            return this.isLte((LongValue) value);
+        } else if (value instanceof LongArrayValue) {
+            return this.isLte((LongArrayValue) value);
+        } else if (value instanceof DoubleValue) {
+            return this.isLte((DoubleValue) value);
+        } else if (value instanceof DoubleArrayValue) {
+            return this.isLte((DoubleArrayValue) value);
+        }
+
+        throw new ExpressionException("unsupported expression operation: DoubleArrayValue.isLte(unknown ExpressionValue)");
+    }
+
+    @Override
+    public ExpressionValue isLte(DoubleValue value){
+        for (double num: this.underlying) {
+            if (num > value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLte(LongValue value) {
+        for (double num: this.underlying) {
+            if (num > value.underlying) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLte(DoubleArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] > values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
+    }
+
+    @Override
+    public ExpressionValue isLte(LongArrayValue values){
+        for (int i = 0; i < this.underlying.length; i++) {
+            if (this.underlying[i] > values.underlying[i]) {
+                return BooleanConstantValue.FALSE;
+            }
+        }
+        return BooleanConstantValue.TRUE;
     }
 
 

@@ -184,6 +184,7 @@ public class TestEvaluator extends FactoryBasedTest {
         // ieee754:     {1.25, 3d, 0.7, 8.1, 4.75}
 
         final Map<String, ExpressionValue> examples = new HashMap<String, ExpressionValue>() {{
+            // Comparison between numbers
             put("1 < 2", BooleanConstantValue.TRUE);
             put("1 <= 1", BooleanConstantValue.TRUE);
             put("1 <= 0", BooleanConstantValue.FALSE);
@@ -194,6 +195,53 @@ public class TestEvaluator extends FactoryBasedTest {
             put("1 >= 2 || 2 > 1", BooleanConstantValue.TRUE);
             put("1 != 1", BooleanConstantValue.FALSE);
             put("1 == 1", BooleanConstantValue.TRUE);
+            put("true == true", BooleanConstantValue.TRUE);
+            put("false == true", BooleanConstantValue.FALSE);
+
+            // Comparison with metric involved
+            // GT and GTE
+            put("5 > 2", BooleanConstantValue.TRUE);
+            put("2 >= 2", BooleanConstantValue.TRUE);
+            put("2.0 >= 2", BooleanConstantValue.TRUE);
+            put("2.0 >= 2.0", BooleanConstantValue.TRUE);
+            put("2.0 >= 2.1", BooleanConstantValue.FALSE);
+            put("nat > 2", BooleanConstantValue.FALSE);
+            put("nat > 0", BooleanConstantValue.FALSE);
+            put("nat >= 0", BooleanConstantValue.TRUE);
+            put("4 >= nat", BooleanConstantValue.TRUE);
+            put("4.0 >= nat", BooleanConstantValue.TRUE);
+            put("3 >= nat", BooleanConstantValue.FALSE);
+            put("3 > nat", BooleanConstantValue.FALSE);
+            put("4 > nat", BooleanConstantValue.FALSE);
+            put("4.0 > nat", BooleanConstantValue.FALSE);
+            put("ieee754 >= 4", BooleanConstantValue.FALSE);
+            put("ieee754 >= 0.7", BooleanConstantValue.TRUE);
+            put("ieee754 > 0.7", BooleanConstantValue.FALSE);
+            put("8.1 > ieee754", BooleanConstantValue.FALSE);
+            put("8 > ieee754", BooleanConstantValue.FALSE);
+            put("8.1 >= ieee754", BooleanConstantValue.TRUE);
+
+            // LT and LTE
+            put("5 < 2", BooleanConstantValue.FALSE);
+            put("1 < 2", BooleanConstantValue.TRUE);
+            put("2 <= 2", BooleanConstantValue.TRUE);
+            put("2.0 <= 2", BooleanConstantValue.TRUE);
+            put("2.0 <= 2.0", BooleanConstantValue.TRUE);
+            put("2.0 <= 2.1", BooleanConstantValue.TRUE);
+            put("nat < 2", BooleanConstantValue.FALSE);
+            put("nat < 4", BooleanConstantValue.FALSE);
+            put("nat <= 4", BooleanConstantValue.TRUE);
+            put("0 <= nat", BooleanConstantValue.TRUE);
+            put("0 < nat", BooleanConstantValue.FALSE);
+            put("1 < nat", BooleanConstantValue.FALSE);
+            put("-1 <= nat", BooleanConstantValue.TRUE);
+            put("ieee754 <= 4", BooleanConstantValue.FALSE);
+            put("ieee754 < 0.7", BooleanConstantValue.FALSE);
+            put("ieee754 > 0.7", BooleanConstantValue.FALSE);
+            put("0.7 <= ieee754", BooleanConstantValue.TRUE);
+            put("8.1 < ieee754", BooleanConstantValue.FALSE);
+            put("8 < ieee754", BooleanConstantValue.FALSE);
+            put("-1 <= ieee754", BooleanConstantValue.TRUE);
         }};
 
         for (final Map.Entry<String, ExpressionValue> example : examples.entrySet()) {
