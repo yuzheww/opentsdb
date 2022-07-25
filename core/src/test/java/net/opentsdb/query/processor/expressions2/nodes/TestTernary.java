@@ -46,7 +46,7 @@ public class TestTernary {
     @Test
     public void testTypeErrorBooleanTrueCase() {
         exnRule.expect(OperatorTypeError.class);
-        exnRule.expectMessage("for operator ' ? : ': type mismatch\n" +
+        exnRule.expectMessage("for operator 'cond ? expr1 : expr2': type mismatch\n" +
                 "given operand(s) of type: BOOLEAN * BOOLEAN * NUMERIC\n" +
                 "expected any of the following: BOOLEAN * NUMERIC * NUMERIC");
         new TernaryOperator(new Equal(new Long(1), new Long(2)), Bool.TRUE, new Long(8));
@@ -72,12 +72,12 @@ public class TestTernary {
 
     @Test
     public void testEquals() {
-//        final Addition a = new Addition(new Double(3.14159), new Double(2.71828));
-//        assertEquals(a, a);
-//
-//        final Addition b = new Addition(new Long(7), new Long(11));
-//        assertEquals(b, b);
-//        assertNotEquals(a, b);
-//        assertNotEquals(b, a);
+        final Equal condition = new Equal(Bool.TRUE, Bool.FALSE);
+        final TernaryOperator t = new TernaryOperator(condition, new Long(2), new Double(3.0));
+        assertEquals(t, t);
+
+        final TernaryOperator t2 = new TernaryOperator(condition, new Long(2), new Double(3.0));
+        assertEquals(t2, t2);
+        assertEquals(t, t2);
     }
 }
